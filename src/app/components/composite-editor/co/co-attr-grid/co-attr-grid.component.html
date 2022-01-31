@@ -1,0 +1,18 @@
+<app-co-second-grid>
+  <div class="flex" first>
+    {{coAttributeType === CoAttributeType.COMPOSITE ? 'Составные атрибуты' : 'Простые атрибуты'}}</div>
+  <div abs class="abs icon">
+    <mat-icon [appToggleClass]="coItem" svgIcon="no-color-arrow"></mat-icon>
+  </div>
+</app-co-second-grid>
+<app-expansion-panel [expanded]="coItem.isExpand">
+  <app-co-second-grid>
+    <div class="flex title" first>Атрибуты</div>
+    <div class="flex title" second>Тип</div>
+  </app-co-second-grid>
+  <app-co-attr-item-drag [items]="items" [coAttributeType]="coAttributeType">
+    <ng-template let-item #item>
+      <app-co-attr-item appHoverClass appCheckClass></app-co-attr-item>
+    </ng-template>
+  </app-co-attr-item-drag>
+</app-expansion-panel>

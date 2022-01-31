@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100%;
+  --grid-column: 25% 75%;
+  --grid-column-child: 65% 35%;
+
+  --grid-height: 42px;
+  --border-gray: 1px solid #E4E4E4;;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+mat-icon {
+  font-size: 0;
+  width: 16px !important;
+  height: 16px !important;
+  display: flex !important;
+  cursor: pointer;
+}

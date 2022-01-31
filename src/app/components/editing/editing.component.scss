@@ -1,0 +1,27 @@
+:host {
+  position: relative;
+  display: block;
+  width: 98%;
+  height: calc(100vh - 36px - 135px);
+
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 0.5rem;
+
+  background-color: #fff;
+  border: 1px solid #cfcfcf;
+  border-radius: 0 0 5px 5px;
+  box-shadow: inset 0 0 0 1px #cfcfcf;
+}
+
+.container {
+  display: flex;
+
+  .child-container.first {
+    width: 20%;
+  }
+
+  .child-container.second {
+    width: 100%;
+  }
+}

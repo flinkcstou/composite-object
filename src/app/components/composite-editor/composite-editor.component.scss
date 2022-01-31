@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+  display: flex;
+  height: 100%;
+
+  .half {
+    position: relative;
+    width: 100%;
+    overflow-y: auto;
+  }
+
+  .border-right {
+    box-sizing: border-box;
+    border-right: var(--border-gray);
+  }
+
+  .vertical-line {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    border-left: var(--border-gray);
+    margin-left: 99px;
+  }
+
+
+}
+

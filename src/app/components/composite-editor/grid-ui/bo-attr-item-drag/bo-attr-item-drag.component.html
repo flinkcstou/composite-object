@@ -1,0 +1,19 @@
+<div [id]="id"
+     class="bo-items-drag"
+     cdkDropList
+     cdkDropListSortingDisabled
+     [cdkDropListData]="items"
+     [cdkDropListConnectedTo]="toIds"
+     (cdkDropListDropped)="drop($event)"
+>
+  <ng-container *ngFor="let item of items">
+    <div class="bo-item-drag" cdkDrag>
+      <ng-container
+        *ngIf="itemTemplateRef"
+        [ngTemplateOutlet]="itemTemplateRef"
+        [ngTemplateOutletContext]="{$implicit:item}"
+      ></ng-container>
+    </div>
+  </ng-container>
+</div>
+

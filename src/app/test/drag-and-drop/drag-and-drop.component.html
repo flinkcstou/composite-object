@@ -1,0 +1,40 @@
+<div class="container">
+  <div
+    cdkDropList
+    id="todoList"
+    [cdkDropListData]="todo"
+    [cdkDropListConnectedTo]="['doneListChild+2', 'doneList']"
+    class="container-list"
+    cdkDropListSortingDisabled
+    (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let item of todo" cdkDrag>
+      <div class="first-placeholder" *cdkDragPlaceholder> {{item}}</div>
+      {{item}}
+    </div>
+  </div>
+
+  <div
+    cdkDropListGroup
+    cdkDropList
+    id="doneList"
+    [cdkDropListData]="done"
+    [cdkDropListConnectedTo]="['todoList']"
+    [cdkDropListSortPredicate]="sortPredicate"
+    cdkDropListSortingDisabled
+    class="container-list"
+    (cdkDropListDropped)="drop($event)">
+    <div *ngFor="let item of done"
+         class="container-child-list"
+         cdkDropList
+         (cdkDropListDropped)="dropChild($event)"
+         id="doneListChild+{{item}}"
+         [cdkDropListData]="[item]">
+      <div cdkDrag class="example-box">
+        {{item}}
+        <div *cdkDragPlaceholder></div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

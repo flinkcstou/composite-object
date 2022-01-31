@@ -1,0 +1,24 @@
+<ng-container *ngFor="let item of items">
+  <div
+    class="co-items-drag"
+    cdkDropList
+    [id]="_coAttributeType + id+item"
+    [class.cursor]="_coAttributeType===CoAttributeType.SIMPLE"
+    [class.simple]="_coAttributeType===CoAttributeType.SIMPLE"
+    [class.composite]="_coAttributeType===CoAttributeType.COMPOSITE"
+    [cdkDropListDisabled]="_coAttributeType!==CoAttributeType.SIMPLE"
+    [cdkDropListData]="[item]"
+    [cdkDropListConnectedTo]="toIds "
+    (cdkDropListDropped)="drop($event)"
+    [cdkDropListSortPredicate]="sortPredicate"
+  >
+    <div class="co-item-drag" cdkDrag>
+      <ng-container
+        *ngIf="itemTemplateRef"
+        [ngTemplateOutlet]="itemTemplateRef"
+        [ngTemplateOutletContext]="{$implicit:item}"
+      ></ng-container>
+    </div>
+  </div>
+</ng-container>
+

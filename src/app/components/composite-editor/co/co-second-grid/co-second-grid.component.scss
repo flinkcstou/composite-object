@@ -1,0 +1,83 @@
+:host {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--grid-column-child);
+
+  box-sizing: border-box;
+  border-bottom: var(--border-gray);
+
+
+  > div {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .right .child {
+    box-sizing: border-box;
+    border-left: var(--border-gray);
+  }
+
+
+  ::ng-deep .flex {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 42px;
+    padding-left: 0.5rem;
+
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
+    color: #232323;
+
+  }
+
+  ::ng-deep .abs {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 42px;
+    right: 0;
+    transition: all 250ms;
+  }
+
+  ::ng-deep .icon {
+    padding-right: 0.5rem;
+
+    mat-icon {
+      margin-left: auto;
+      color: #DADADA;
+
+      transition: transform 250ms;
+
+      &.expand {
+        transform: rotate(-180deg);
+      }
+    }
+  }
+
+  ::ng-deep .title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+
+    color: #232323;
+  }
+
+  ::ng-deep .header {
+    padding-left: 1rem;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 25px;
+
+    color: #232323;
+  }
+
+
+}

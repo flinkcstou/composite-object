@@ -1,0 +1,9 @@
+<app-co-second-grid>
+  <div class="flex header" first>
+    Категория
+  </div>
+</app-co-second-grid>
+<ng-container *ngFor="let coAttributeType of coAttributeTypes">
+  <app-co-attr-grid [coAttributeType]="coAttributeType"></app-co-attr-grid>
+</ng-container>
+

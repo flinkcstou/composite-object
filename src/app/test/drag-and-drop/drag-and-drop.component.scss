@@ -1,0 +1,106 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.container-list {
+  position: relative;
+  width: 40%;
+  height: 100%;
+  min-height: 60px;
+  border: solid 1px #ccc;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-child-list {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.example-box {
+  position: relative;
+  width: 80%;
+  height: 60px;
+  border: solid 1px #ccc;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  box-sizing: border-box;
+  padding: 0 10px;
+
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: move;
+}
+
+.first-placeholder {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 80%;
+  height: 60px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drop-list {
+  //background: #EE5252;
+}
+
+.cdk-drop-list-dragging {
+  background: aquamarine;
+}
+
+.cdk-drop-list-receiving {
+  background: chartreuse !important;;
+}
+
+.cdk-drag {
+  //background: #EE5252;
+}
+
+
+.cdk-drag-handle {
+  background: green;
+}
+
+.cdk-drag-preview {
+  background: purple;
+}
+
+.cdk-drag-placeholder {
+  background: #2F80ED;
+}
+
+.container-child-list .cdk-drag-placeholder {
+  width: 0;
+}
+
+.container-child-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  background: #2F80ED;
+}
+
+.cdk-drop-list.container-child-list.cdk-drop-list-receiving {
+  min-height: 60px;
+}
+
+.cdk-drop-list.container-child-list.cdk-drop-list-dragging {
+  min-height: 60px;
+}
+
+
+

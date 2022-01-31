@@ -1,0 +1,9 @@
+:host {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--grid-column-child);
+  align-items: center;
+  height: 100%;
+  border-bottom: var(--border-gray);
+  box-sizing: border-box;
+}

@@ -1,0 +1,9 @@
+<div [id]="id"
+     class="attr-group"
+     cdkDropList
+     cdkDropListSortingDisabled
+     [cdkDropListSortPredicate]="sortPredicate"
+     (cdkDropListDropped)="drop($event)"
+>
+  <ng-content></ng-content>
+</div>

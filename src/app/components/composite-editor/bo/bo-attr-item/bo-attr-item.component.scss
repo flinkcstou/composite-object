@@ -1,0 +1,77 @@
+:host {
+
+
+  position: relative;
+
+  display: grid;
+  grid-template-columns: var(--grid-column-child);
+  grid-template-rows: var(--grid-height);
+  align-items: center;
+
+  cursor: pointer;
+
+  &.check .left .icon {
+    color: #2f80ed
+
+  }
+
+  .left {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-left: var(--border-gray);
+    border-right: var(--border-gray);
+    border-bottom: var(--border-gray);
+    box-sizing: border-box;
+
+    & > div:not(:first-child) {
+      padding-left: 0.5rem;
+    }
+
+    .icon {
+      color: #DADADA;
+    }
+
+    .title {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 18px;
+      color: #232323;
+    }
+
+    .form-element-title {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 10px;
+      line-height: 13px;
+      color: #ADADAD;
+    }
+  }
+
+  .right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+
+    border-bottom: var(--border-gray);
+    box-sizing: border-box;
+
+    .title {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 18px;
+
+      color: #232323;
+    }
+  }
+
+
+}
