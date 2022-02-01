@@ -9,7 +9,7 @@
   </div>
 </div>
 <div class="right">
-  <app-bo-attr-item-first *ngIf="!boItem?.isExpand"></app-bo-attr-item-first>
+  <app-bo-attr-item-first *ngIf="!boItem?.isExpand" [appToggleClass]="boItem"></app-bo-attr-item-first>
   <app-expansion-panel *ngIf="boItem.isExpand"
                        [defaultExpanded]="boItem.isExpand">
     <app-bo-attr-item-drag [items]="items">
@@ -22,7 +22,7 @@
 </div>
 <div class="abs">
   <div class="icon">
-    <mat-icon svgIcon="no-color-arrow" [appToggleClass]="boItem"></mat-icon>
+    <mat-icon svgIcon="no-color-arrow" [class.expand]="boItem.isExpand" [appToggleClass]="boItem"></mat-icon>
   </div>
 </div>
 

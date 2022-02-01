@@ -1,0 +1,1 @@
+- arrow click to full container

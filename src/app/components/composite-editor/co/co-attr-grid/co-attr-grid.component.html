@@ -1,8 +1,8 @@
-<app-co-second-grid>
+<app-co-second-grid [appToggleClass]="coItem">
   <div class="flex" first>
     {{coAttributeType === CoAttributeType.COMPOSITE ? 'Составные атрибуты' : 'Простые атрибуты'}}</div>
   <div abs class="abs icon">
-    <mat-icon [appToggleClass]="coItem" svgIcon="no-color-arrow"></mat-icon>
+    <mat-icon [class.expand]="coItem.isExpand" [appToggleClass]="coItem" svgIcon="no-color-arrow"></mat-icon>
   </div>
 </app-co-second-grid>
 <app-expansion-panel [expanded]="coItem.isExpand">

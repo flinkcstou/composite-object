@@ -23,6 +23,7 @@ export class CoAttrGroupDragComponent implements OnInit {
   drop(event: CdkDragDrop<number[]>): void {
     this.dragService.dropDefault(event);
   }
+
   sortPredicate(index: number, item: CdkDrag<number>): boolean {
     return false;
   }

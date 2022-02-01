@@ -1,7 +1,8 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[appToggleClass]'
+  selector: '[appToggleClass]',
+  exportAs: 'toggleClass'
 })
 export class ToggleClassDirective {
 
@@ -9,7 +10,7 @@ export class ToggleClassDirective {
   @Input() set appToggleClass(value: any) {
     this._appToggleClass = value;
     this.setClass();
-  };
+  }
 
   @Output() toggleEmit: EventEmitter<any> = new EventEmitter<any>();
 
@@ -28,8 +29,10 @@ export class ToggleClassDirective {
   }
 
 
-  @HostListener('click')
-  toggleClass(): void {
+  @HostListener('click', ['$event'])
+  toggleClass($event: MouseEvent): void {
+    $event.preventDefault();
+    $event.stopPropagation();
     this._appToggleClass.isExpand = !this._appToggleClass.isExpand;
     this.setClass();
     this.toggleEmit.emit(this._appToggleClass.isExpand);

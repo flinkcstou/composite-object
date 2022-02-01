@@ -66,4 +66,8 @@ export class DragService {
       );
     }
   }
+
+  sortPredicate(): boolean {
+    return false;
+  }
 }

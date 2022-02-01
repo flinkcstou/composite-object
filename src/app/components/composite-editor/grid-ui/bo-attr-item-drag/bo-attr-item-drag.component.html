@@ -7,7 +7,11 @@
      (cdkDropListDropped)="drop($event)"
 >
   <ng-container *ngFor="let item of items">
-    <div class="bo-item-drag" cdkDrag>
+    <div class="bo-item-drag" cdkDrag
+         (cdkDragStarted)="cdkDragStarted($event, item)"
+         (cdkDragEnded)="cdkDragEnded($event)"
+
+    >
       <ng-container
         *ngIf="itemTemplateRef"
         [ngTemplateOutlet]="itemTemplateRef"

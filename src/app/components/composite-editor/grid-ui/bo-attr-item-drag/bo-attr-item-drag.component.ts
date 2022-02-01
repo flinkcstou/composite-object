@@ -1,5 +1,5 @@
 import { Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
 import { BoAttrItemComponent } from 'src/app/components/composite-editor/bo/bo-attr-item/bo-attr-item.component';
 import { DragService } from 'src/app/components/composite-editor/services/drag.service';
 
@@ -31,4 +31,9 @@ export class BoAttrItemDragComponent implements OnInit {
     this.dragService.dropDefault(event);
   }
 
+  cdkDragStarted($event: CdkDragStart, item: any): void {
+  }
+
+  cdkDragEnded($event: CdkDragEnd): void {
+  }
 }

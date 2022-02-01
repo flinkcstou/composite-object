@@ -54,10 +54,11 @@ export class CoAttrItemDragComponent implements OnInit {
 
   }
 
-  copyPlaceHolderDrag(item: any, bodyContainer: HTMLElement, innerHide: HTMLElement, csdf: CdkDropList): void {
+  copyPlaceHolderDrag(item: any, bodyContainer: HTMLElement, innerHide: HTMLElement, cdkDropList: CdkDropList): void {
     const dynamicIds = this.items.filter((i: number) => i !== item);
     this.toIds = this.dragService.toIdsSimple(dynamicIds);
-    csdf.connectedTo = this.toIds;
+    cdkDropList.connectedTo = this.toIds;
+
     innerHide.innerHTML = bodyContainer.innerHTML;
   }
 
