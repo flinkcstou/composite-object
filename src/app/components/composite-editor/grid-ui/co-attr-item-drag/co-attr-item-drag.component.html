@@ -2,23 +2,34 @@
   <div
     class="co-items-drag"
     cdkDropList
+    cdkDropListSortingDisabled
+    #cdkDropList="cdkDropList"
     [id]="_coAttributeType + id+item"
     [class.cursor]="_coAttributeType===CoAttributeType.SIMPLE"
     [class.simple]="_coAttributeType===CoAttributeType.SIMPLE"
     [class.composite]="_coAttributeType===CoAttributeType.COMPOSITE"
     [cdkDropListDisabled]="_coAttributeType!==CoAttributeType.SIMPLE"
     [cdkDropListData]="[item]"
-    [cdkDropListConnectedTo]="toIds "
+    [cdkDropListConnectedTo]="toIds"
     (cdkDropListDropped)="drop($event)"
     [cdkDropListSortPredicate]="sortPredicate"
   >
-    <div class="co-item-drag" cdkDrag>
-      <ng-container
-        *ngIf="itemTemplateRef"
-        [ngTemplateOutlet]="itemTemplateRef"
-        [ngTemplateOutletContext]="{$implicit:item}"
-      ></ng-container>
+    <div class="co-item-drag"
+         (cdkDragStarted)="copyPlaceHolderDrag(item, bodyContainer, innerHide, cdkDropList )"
+         (cdkDragEnded)="ended($event, item)"
+         cdkDrag>
+
+      <div class="custom-placeholder" *cdkDragPlaceholder></div>
+
+      <div #bodyContainer>
+        <ng-container
+          *ngIf="itemTemplateRef"
+          [ngTemplateOutlet]="itemTemplateRef"
+          [ngTemplateOutletContext]="{$implicit:item}"
+        ></ng-container>
+      </div>
     </div>
+    <div #innerHide class="co-item-drag-hide"></div>
   </div>
 </ng-container>
 

@@ -32,6 +32,14 @@ export class DragService {
     return [];
   }
 
+  toIdsSimple(items: number[]): string[] {
+    const toIds: string[] = [];
+    items.forEach((v: number) => toIds.push(CoAttributeType.SIMPLE + this.coAttrItemsDrag + v));
+    toIds.push(...this.toIdsCoDragSimple());
+    // toIds.push(this.coAttrGroupDrag);
+    return toIds;
+  }
+
   toIdsCoDragComposite(): string[] {
     const toIds: string[] = [];
     [1, 2, 3, 4].forEach((v: number) => toIds.push(CoAttributeType.SIMPLE + this.coAttrItemsDrag + v));
@@ -41,6 +49,7 @@ export class DragService {
   toIdsCoDragSimple(): string[] {
     const toIds: string[] = [];
     [1, 2, 3, 4].forEach((v: number) => toIds.push(CoAttributeType.COMPOSITE + this.coAttrItemsDrag + v));
+    // toIds.push(this.coAttrGroupDrag);
     return toIds;
   }
 

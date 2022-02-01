@@ -1,9 +1,4 @@
 .co-items-drag {
-
-  .co-item-drag {
-
-  }
-
   &.cursor {
     cursor: pointer;
   }
@@ -16,20 +11,26 @@
   border-radius: 4px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
   0 8px 10px 1px rgba(0, 0, 0, 0.14),
-  0 3px 14px 2 p x rgba(0, 0, 0, 0.12);
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
-.cdk-drag-placeholder {
-  background: #E4E4E4;
-}
-
-
-.co-items-drag.cdk-drop-list-dragging.composite {
-  .co-item-drag.cdk-drag-placeholder {
-    height: 0;
-    width: 0;
-    overflow: hidden;
+.co-items-drag {
+  .co-item-drag-hide {
+    background: #2F80ED;
   }
+}
+
+.co-items-drag.cdk-drop-list-dragging {
+
+  .co-item-drag-hide {
+    display: block;
+    background: #E4E4E4;
+  }
+}
+
+
+.co-item-drag + .co-item-drag-hide {
+  display: none !important;
 }
 
 
