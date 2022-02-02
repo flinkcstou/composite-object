@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoAttrGridComponent implements OnInit {
 
-  items = [1, 2, 3, 4];
+  items: any[] = [{}, {}, {}, {}];
   boItem = {
     isExpand: false
   };

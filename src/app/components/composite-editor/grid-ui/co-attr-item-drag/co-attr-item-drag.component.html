@@ -15,13 +15,14 @@
     [cdkDropListSortPredicate]="sortPredicate"
   >
     <div class="co-item-drag"
-         (cdkDragStarted)="copyPlaceHolderDrag(item, bodyContainer, innerHide, cdkDropList )"
-         (cdkDragEnded)="ended($event, item)"
+         (cdkDragStarted)="started($event, bodyC, replacementC, item, cdkDropList )"
+         (cdkDragEntered)="entered($event)"
+         (cdkDragEnded)="ended($event, replacementC)"
          cdkDrag>
 
       <div class="custom-placeholder" *cdkDragPlaceholder></div>
 
-      <div #bodyContainer>
+      <div #bodyC>
         <ng-container
           *ngIf="itemTemplateRef"
           [ngTemplateOutlet]="itemTemplateRef"
@@ -29,7 +30,7 @@
         ></ng-container>
       </div>
     </div>
-    <div #innerHide class="co-item-drag-hide"></div>
+    <div #replacementC class="co-item-drag-replacement"></div>
   </div>
 </ng-container>
 

@@ -6,15 +6,22 @@ import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAt
   providedIn: 'root'
 })
 export class DragService {
+
   public readonly boAttrItemsDrag = 'bo-attr-items-drag';
   public readonly coAttrItemsDrag = 'co-attr-items-drag';
   public readonly coAttrGroupDrag = 'co-attr-group-drag';
 
   coAttributeTypes = [CoAttributeType.COMPOSITE, CoAttributeType.SIMPLE];
 
+  public coItems: any = []; // todo nabu change
+
   constructor() {
   }
 
+
+  expandCo(): void {
+    this.coItems.forEach((c: any) => c.isExpand = true);
+  }
 
   toIdsBoDrag(): string[] {
     const toIds = [];
@@ -65,9 +72,5 @@ export class DragService {
         event.currentIndex,
       );
     }
-  }
-
-  sortPredicate(): boolean {
-    return false;
   }
 }

@@ -10,9 +10,9 @@
     <div class="flex title" first>Атрибуты</div>
     <div class="flex title" second>Тип</div>
   </app-co-second-grid>
-  <app-co-attr-item-drag [items]="items" [coAttributeType]="coAttributeType">
+  <app-co-attr-item-drag  [coItem]="coItem" [items]="items" [coAttributeType]="coAttributeType">
     <ng-template let-item #item>
-      <app-co-attr-item appHoverClass appCheckClass></app-co-attr-item>
+      <app-co-attr-item appHoverClass></app-co-attr-item>
     </ng-template>
   </app-co-attr-item-drag>
 </app-expansion-panel>

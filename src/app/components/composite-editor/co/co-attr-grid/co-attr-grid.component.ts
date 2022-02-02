@@ -12,7 +12,7 @@ export class CoAttrGridComponent implements OnInit {
   @Input() coAttributeType: CoAttributeType = CoAttributeType.COMPOSITE;
 
   CoAttributeType = CoAttributeType;
-  items = [1, 2, 3, 4];
+  items: any[] = [1, 2, 3, 4];
   coItem = {
     isExpand: false
   };

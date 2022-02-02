@@ -1,26 +1,17 @@
-import { Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
-import { CdkDragDrop, CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
-import { BoAttrItemComponent } from 'src/app/components/composite-editor/bo/bo-attr-item/bo-attr-item.component';
+import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragStart } from '@angular/cdk/drag-drop';
 import { DragService } from 'src/app/components/composite-editor/services/drag.service';
+import { CommonSourceDragDirective } from 'src/app/components/composite-editor/grid-ui/common-source-drag.directive';
 
 @Component({
   selector: 'app-bo-attr-item-drag',
   templateUrl: './bo-attr-item-drag.component.html',
   styleUrls: ['./bo-attr-item-drag.component.scss']
 })
-export class BoAttrItemDragComponent implements OnInit {
-
-  @Input() items: any;
-
-  // @ts-ignore
-  @ContentChild('item', {static: false}) itemTemplateRef: TemplateRef<BoAttrItemComponent>;
-
-
-  id;
-  toIds: string[] = [];
+export class BoAttrItemDragComponent extends CommonSourceDragDirective implements OnInit {
 
   constructor(private dragService: DragService) {
-    this.id = this.dragService.boAttrItemsDrag;
+    super(dragService.boAttrItemsDrag);
     this.toIds = this.dragService.toIdsBoDrag();
   }
 
@@ -31,9 +22,16 @@ export class BoAttrItemDragComponent implements OnInit {
     this.dragService.dropDefault(event);
   }
 
-  cdkDragStarted($event: CdkDragStart, item: any): void {
+  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement): void {
+    this.cdkDragStarted($event, bodyC, replacementC);
+    this.dragService.expandCo();
   }
 
-  cdkDragEnded($event: CdkDragEnd): void {
+  entered($event: CdkDragEnter<any>): void {
+    this.cdkDragEntered($event);
+  }
+
+  ended($event: CdkDragEnd, replacementC: HTMLElement): void {
+    this.cdkDragEnded($event, replacementC);
   }
 }

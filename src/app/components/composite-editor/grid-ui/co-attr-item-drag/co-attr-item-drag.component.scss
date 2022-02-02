@@ -14,23 +14,22 @@
   0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
-.co-items-drag {
-  .co-item-drag-hide {
-    background: #2F80ED;
-  }
+
+.co-item-drag-replacement {
+  display: block;
+  background: #E4E4E4;
+}
+
+.co-item-drag + .co-item-drag-replacement {
+  display: none !important;
 }
 
 .co-items-drag.cdk-drop-list-dragging {
 
-  .co-item-drag-hide {
-    display: block;
-    background: #E4E4E4;
+  .co-item-drag {
+    box-sizing: border-box;
+    border: 1px solid #2F80ED;
   }
+
 }
-
-
-.co-item-drag + .co-item-drag-hide {
-  display: none !important;
-}
-
 

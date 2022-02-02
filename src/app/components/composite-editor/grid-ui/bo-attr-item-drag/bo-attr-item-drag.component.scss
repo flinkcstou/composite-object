@@ -1,7 +1,3 @@
-.cdk-drag-placeholder {
-  background: #E4E4E4;
-}
-
 .cdk-drag-preview {
   background: #FFFFFF;
 
@@ -12,13 +8,28 @@
   0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
+.cdk-drag-placeholder {
+  background: #E4E4E4;
+}
+
+.bo-item-drag-replacement {
+  display: none;
+  background: #E4E4E4;
+
+  &.show {
+    display: block !important;
+  }
+
+}
+
+.draggable {
+  .bo-item-drag.check {
+    background: #E4E4E4;
+  }
+}
 
 ::ng-deep .co-items-drag.cdk-drop-list-dragging {
 
-  .co-item-drag {
-    box-sizing: border-box;
-    border: 1px solid #2F80ED;
-  }
 
   .bo-item-drag.cdk-drag-placeholder {
     height: 0;

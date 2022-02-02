@@ -14,7 +14,7 @@
                        [defaultExpanded]="boItem.isExpand">
     <app-bo-attr-item-drag [items]="items">
       <ng-template let-item #item>
-        <app-bo-attr-item appCheckClass>
+        <app-bo-attr-item [appCheckClass]="item">
         </app-bo-attr-item>
       </ng-template>
     </app-bo-attr-item-drag>

@@ -28,10 +28,6 @@
     padding-left: 0.5rem;
     height: 100%;
 
-    > div:not(:first-child) {
-      padding-left: 0.5rem;
-    }
-
     .title {
       font-style: normal;
       font-weight: normal;
@@ -39,11 +35,6 @@
       line-height: 18px;
 
       color: #232323;
-
-    }
-
-    .icon {
-      color: #E7E7E7;
     }
   }
 

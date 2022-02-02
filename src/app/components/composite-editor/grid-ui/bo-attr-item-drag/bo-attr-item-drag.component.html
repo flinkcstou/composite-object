@@ -2,22 +2,30 @@
      class="bo-items-drag"
      cdkDropList
      cdkDropListSortingDisabled
+     [class.draggable]="isDraggable"
      [cdkDropListData]="items"
      [cdkDropListConnectedTo]="toIds"
      (cdkDropListDropped)="drop($event)"
 >
   <ng-container *ngFor="let item of items">
-    <div class="bo-item-drag" cdkDrag
-         (cdkDragStarted)="cdkDragStarted($event, item)"
-         (cdkDragEnded)="cdkDragEnded($event)"
-
+    <div
+      class="bo-item-drag"
+      [class.check]="item?.isChecked"
+      cdkDrag
+      (cdkDragStarted)="started($event, bodyC, replacementC)"
+      (cdkDragEntered)="entered($event)"
+      (cdkDragEnded)="ended($event, replacementC)"
     >
-      <ng-container
-        *ngIf="itemTemplateRef"
-        [ngTemplateOutlet]="itemTemplateRef"
-        [ngTemplateOutletContext]="{$implicit:item}"
-      ></ng-container>
+      <div #bodyC>
+        <ng-container
+          *ngIf="itemTemplateRef"
+          [ngTemplateOutlet]="itemTemplateRef"
+          [ngTemplateOutletContext]="{$implicit:item}"
+        ></ng-container>
+      </div>
     </div>
+    <div #replacementC [class.show]="isReplacementShow" class="bo-item-drag-replacement"></div>
   </ng-container>
+
 </div>
 
