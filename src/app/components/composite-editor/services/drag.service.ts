@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAttributeType';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,15 @@ export class DragService {
 
   public coItems: any = []; // todo nabu change
 
+  private boDraggableBehaviorSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public boDraggable$$: Observable<boolean> = this.boDraggableBehaviorSubject.asObservable();
+
   constructor() {
   }
 
+  set isBoDraggable(value: boolean) {
+    this.boDraggableBehaviorSubject.next(value);
+  }
 
   expandCo(): void {
     this.coItems.forEach((c: any) => c.isExpand = true);

@@ -10,8 +10,8 @@ import { CommonSourceDragDirective } from 'src/app/components/composite-editor/g
 })
 export class CoAttrGroupDragComponent extends CommonSourceDragDirective implements OnInit {
 
-  constructor(private dragService: DragService) {
-    super(dragService.coAttrGroupDrag);
+  constructor(protected dragService: DragService) {
+    super(dragService, dragService.coAttrGroupDrag);
   }
 
 

@@ -27,8 +27,8 @@ export class CoAttrItemDragComponent extends CommonSourceDragDirective implement
   }
 
 
-  constructor(private dragService: DragService) {
-    super(dragService.coAttrItemsDrag);
+  constructor(protected dragService: DragService) {
+    super(dragService, dragService.coAttrItemsDrag);
   }
 
   ngOnInit(): void {

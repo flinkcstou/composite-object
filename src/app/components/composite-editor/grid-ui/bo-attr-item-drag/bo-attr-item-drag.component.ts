@@ -10,8 +10,8 @@ import { CommonSourceDragDirective } from 'src/app/components/composite-editor/g
 })
 export class BoAttrItemDragComponent extends CommonSourceDragDirective implements OnInit {
 
-  constructor(private dragService: DragService) {
-    super(dragService.boAttrItemsDrag);
+  constructor(protected dragService: DragService) {
+    super(dragService, dragService.boAttrItemsDrag);
     this.toIds = this.dragService.toIdsBoDrag();
   }
 
@@ -24,8 +24,7 @@ export class BoAttrItemDragComponent extends CommonSourceDragDirective implement
 
   started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement): void {
     this.cdkDragStarted($event, bodyC, replacementC);
-    this.updatePosition($event);
-    this.dragService.expandCo();
+    this.setPosition($event);
   }
 
   entered($event: CdkDragEnter<any>): void {

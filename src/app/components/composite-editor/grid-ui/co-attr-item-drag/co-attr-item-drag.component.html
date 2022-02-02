@@ -2,8 +2,8 @@
   *ngFor="let item of items"
   class="co-items-drag"
   cdkDropList
-  cdkDropListSortingDisabled
   #cdkDropList="cdkDropList"
+  cdkDropListSortingDisabled
 
   [id]="_coAttributeType + id+item"
   [class.cursor]="_coAttributeType===CoAttributeType.SIMPLE"
