@@ -24,6 +24,7 @@ export class BoAttrItemDragComponent extends CommonSourceDragDirective implement
 
   started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement): void {
     this.cdkDragStarted($event, bodyC, replacementC);
+    this.updatePosition($event);
     this.dragService.expandCo();
   }
 

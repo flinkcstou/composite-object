@@ -1,6 +1,7 @@
 <div [id]="id"
      class="attr-group"
      cdkDropList
+     #cdkDropList="cdkDropList"
      cdkDropListSortingDisabled
      [cdkDropListSortPredicate]="sortPredicate"
      (cdkDropListDropped)="drop($event)">

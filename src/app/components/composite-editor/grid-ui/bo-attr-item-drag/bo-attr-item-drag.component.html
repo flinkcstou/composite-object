@@ -1,6 +1,7 @@
 <div [id]="id"
      class="bo-items-drag"
      cdkDropList
+     #cdkDropList="cdkDropList"
      cdkDropListSortingDisabled
      [class.draggable]="isDraggable"
      [cdkDropListData]="items"

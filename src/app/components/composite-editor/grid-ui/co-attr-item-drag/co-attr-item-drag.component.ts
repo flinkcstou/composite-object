@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragStart, CdkDropList } from '@angular/cdk/drag-drop';
 import { DragService } from 'src/app/components/composite-editor/services/drag.service';
 import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAttributeType';

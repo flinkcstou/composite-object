@@ -1,36 +1,35 @@
-<ng-container *ngFor="let item of items">
-  <div
-    class="co-items-drag"
-    cdkDropList
-    cdkDropListSortingDisabled
-    #cdkDropList="cdkDropList"
-    [id]="_coAttributeType + id+item"
-    [class.cursor]="_coAttributeType===CoAttributeType.SIMPLE"
-    [class.simple]="_coAttributeType===CoAttributeType.SIMPLE"
-    [class.composite]="_coAttributeType===CoAttributeType.COMPOSITE"
-    [cdkDropListDisabled]="_coAttributeType!==CoAttributeType.SIMPLE"
-    [cdkDropListData]="[item]"
-    [cdkDropListConnectedTo]="toIds"
-    (cdkDropListDropped)="drop($event)"
-    [cdkDropListSortPredicate]="sortPredicate"
-  >
-    <div class="co-item-drag"
-         (cdkDragStarted)="started($event, bodyC, replacementC, item, cdkDropList )"
-         (cdkDragEntered)="entered($event)"
-         (cdkDragEnded)="ended($event, replacementC)"
-         cdkDrag>
+<div
+  *ngFor="let item of items"
+  class="co-items-drag"
+  cdkDropList
+  cdkDropListSortingDisabled
+  #cdkDropList="cdkDropList"
 
-      <div class="custom-placeholder" *cdkDragPlaceholder></div>
+  [id]="_coAttributeType + id+item"
+  [class.cursor]="_coAttributeType===CoAttributeType.SIMPLE"
+  [class.simple]="_coAttributeType===CoAttributeType.SIMPLE"
+  [class.composite]="_coAttributeType===CoAttributeType.COMPOSITE"
+  [cdkDropListDisabled]="_coAttributeType!==CoAttributeType.SIMPLE"
+  [cdkDropListData]="[item]"
+  [cdkDropListConnectedTo]="toIds"
+  (cdkDropListDropped)="drop($event)"
+  [cdkDropListSortPredicate]="sortPredicate"
+>
+  <div class="co-item-drag"
+       (cdkDragStarted)="started($event, bodyC, replacementC, item, cdkDropList )"
+       (cdkDragEntered)="entered($event)"
+       (cdkDragEnded)="ended($event, replacementC)"
+       cdkDrag>
 
-      <div #bodyC>
-        <ng-container
-          *ngIf="itemTemplateRef"
-          [ngTemplateOutlet]="itemTemplateRef"
-          [ngTemplateOutletContext]="{$implicit:item}"
-        ></ng-container>
-      </div>
+    <div class="custom-placeholder" *cdkDragPlaceholder></div>
+
+    <div #bodyC>
+      <ng-container
+        *ngIf="itemTemplateRef"
+        [ngTemplateOutlet]="itemTemplateRef"
+        [ngTemplateOutletContext]="{$implicit:item}"
+      ></ng-container>
     </div>
-    <div #replacementC class="co-item-drag-replacement"></div>
   </div>
-</ng-container>
-
+  <div #replacementC class="co-item-drag-replacement"></div>
+</div>

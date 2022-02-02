@@ -1,6 +1,6 @@
-import { ContentChild, Directive, Input, TemplateRef } from '@angular/core';
+import { ContentChild, Directive, Input, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { BoAttrItemComponent } from 'src/app/components/composite-editor/bo/bo-attr-item/bo-attr-item.component';
-import { CdkDrag, CdkDragEnd, CdkDragEnter, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragEnd, CdkDragEnter, CdkDragStart, CdkDropList } from '@angular/cdk/drag-drop';
 
 @Directive()
 export class CommonSourceDragDirective {
@@ -9,6 +9,9 @@ export class CommonSourceDragDirective {
 
   // @ts-ignore
   @ContentChild('item', {static: false}) public itemTemplateRef: TemplateRef<BoAttrItemComponent>;
+
+  // @ts-ignore
+  @ViewChildren('cdkDropList') cdkDropList: QueryList<CdkDropList>;
 
   public toIds: string[] = [];
 
@@ -35,6 +38,13 @@ export class CommonSourceDragDirective {
     this.isDraggable = false;
     this.isReplacementShow = false;
     replacementC.innerHTML = '';
+  }
+
+  updatePosition($event: CdkDragStart): void {
+    setTimeout(() => {
+      // @ts-ignore
+      this.cdkDropList.forEach((item: any) => item._dropListRef.enter($event.source._dragRef, 1, 1, $event.source['_initialIndex']));
+    }, 500);
   }
 
 
