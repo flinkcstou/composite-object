@@ -1,4 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from '@angular/core';
+import { BoRecordWithFields } from 'src/app/components/composite-editor/models/BoRecordWithFields';
 
 @Directive({
   selector: '[appToggleClass]',
@@ -6,8 +7,8 @@ import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Rende
 })
 export class ToggleClassDirective {
 
-  private _appToggleClass: any = {};
-  @Input() set appToggleClass(value: any) {
+  private _appToggleClass: BoRecordWithFields | any = {};
+  @Input() set appToggleClass(value: BoRecordWithFields | any) {
     this._appToggleClass = value;
     this.setClass();
   }

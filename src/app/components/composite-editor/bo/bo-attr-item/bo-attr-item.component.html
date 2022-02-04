@@ -3,16 +3,16 @@
     <mat-icon svgIcon="no-color-checkbox"></mat-icon>
   </div>
   <div class="title">
-    Дата
+    {{field?.label}}
   </div>
   <div class="form-element-title">
-    вкладка “Мероприятия” -> “Торги”
+    {{field?.tabId | findTabGroup}}
   </div>
 </div>
 
 <div class="right">
   <div class="title">
-    Справочник
+    {{(field?.type || field?.widgetType || field?.nativeFieldType)| lowercase}}
   </div>
 </div>
 

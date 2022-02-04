@@ -26,6 +26,7 @@ import { CoAttrGroupComponent } from './components/composite-editor/co/co-attr-g
 import { CoAttrGroupDragComponent } from './components/composite-editor/grid-ui/co-attr-group-drag/co-attr-group-drag.component';
 import { CoAttrItemComponent } from './components/composite-editor/co/co-attr-item/co-attr-item.component';
 import { CoAttrItemDragComponent } from './components/composite-editor/grid-ui/co-attr-item-drag/co-attr-item-drag.component';
+import { FindTabGroupPipe } from './components/pipes/find-tab-group.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { CoAttrItemDragComponent } from './components/composite-editor/grid-ui/c
     CoAttrGroupDragComponent,
     CoAttrItemComponent,
     CoAttrItemDragComponent,
+    FindTabGroupPipe,
   ],
   imports: [
     BrowserModule,

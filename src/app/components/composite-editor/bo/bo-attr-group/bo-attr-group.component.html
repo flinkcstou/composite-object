@@ -1,5 +1,5 @@
 <app-bo-second-grid>
-  <div class="flex add-bo" first>
+  <div (click)="chooseRecord()" class="flex add-bo" first>
     <div class="icon">
       <mat-icon svgIcon="no-color-add"></mat-icon>
     </div>
@@ -19,7 +19,7 @@
     Тип
   </div>
 </app-bo-second-grid>
-<ng-container *ngFor="let item of items">
-  <app-bo-attr-grid appHoverClass></app-bo-attr-grid>
+<ng-container *ngFor="let boRecordWithFields of boRecordsWithFields">
+  <app-bo-attr-grid appHoverClass [boFields]="boRecordWithFields"></app-bo-attr-grid>
 </ng-container>
 

@@ -1,7 +1,7 @@
 <div class="left">
   <div class="object">
-    <div class="title">
-      Встреча
+    <div [title]="boFields?.name" class="title">
+      {{boFields?.name}}
     </div>
     <div class="icon">
       <mat-icon svgIcon="no-color-remove"></mat-icon>
@@ -9,12 +9,15 @@
   </div>
 </div>
 <div class="right">
-  <app-bo-attr-item-first *ngIf="!boItem?.isExpand" [appToggleClass]="boItem"></app-bo-attr-item-first>
-  <app-expansion-panel *ngIf="boItem.isExpand"
-                       [defaultExpanded]="boItem.isExpand">
-    <app-bo-attr-item-drag [items]="items">
+  <app-bo-attr-item-first *ngIf="!boFields?.isExpand"
+                          [appToggleClass]="boFields"></app-bo-attr-item-first>
+  <app-expansion-panel *ngIf="boFields.isExpand"
+                       [defaultExpanded]="boFields.isExpand">
+    <app-bo-attr-item-drag [items]="boFields.fields">
       <ng-template let-item #item>
-        <app-bo-attr-item [appCheckClass]="item">
+        <app-bo-attr-item [appCheckClass]="item"
+                          [field]="item"
+        >
         </app-bo-attr-item>
       </ng-template>
     </app-bo-attr-item-drag>
@@ -22,7 +25,7 @@
 </div>
 <div class="abs">
   <div class="icon">
-    <mat-icon svgIcon="no-color-arrow" [class.expand]="boItem.isExpand" [appToggleClass]="boItem"></mat-icon>
+    <mat-icon svgIcon="no-color-arrow" [class.expand]="boFields.isExpand"  (toggleEmit)="clearCheck()" [appToggleClass]="boFields"></mat-icon>
   </div>
 </div>
 

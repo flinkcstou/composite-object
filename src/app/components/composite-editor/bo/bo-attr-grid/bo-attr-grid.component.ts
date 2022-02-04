@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/composite-editor/models/BoRecordWithFields';
+import { StyleFieldF } from 'src/app/components/composite-editor/models/StyleField';
 
 @Component({
   selector: 'app-bo-attr-grid',
@@ -7,10 +9,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoAttrGridComponent implements OnInit {
 
-  items: any[] = [{}, {}, {}, {}];
-  boItem = {
-    isExpand: false
-  };
+  //@ts-ignore
+  @Input() boFields: BoRecordWithFields;
 
   constructor() {
   }
@@ -18,4 +18,7 @@ export class BoAttrGridComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  clearCheck(): void {
+    StyleFieldF.clearCheck(this.boFields);
+  }
 }

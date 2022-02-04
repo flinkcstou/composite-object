@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { BoFieldView } from 'src/app/components/composite-editor/models/BoFieldView';
 
 @Component({
   selector: 'app-bo-attr-item',
@@ -7,6 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class BoAttrItemComponent implements OnInit {
 
+
+  // @ts-ignore
+  @Input() field: BoFieldView;
 
   constructor() {
   }
