@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/composite-editor/models/BoRecordWithFields';
 import { StyleFieldF } from 'src/app/components/composite-editor/models/StyleField';
+import { CoService } from 'src/app/components/services/co.service';
+import { Subject } from 'rxjs';
+import { exhaustMap, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bo-attr-grid',
@@ -10,15 +13,23 @@ import { StyleFieldF } from 'src/app/components/composite-editor/models/StyleFie
 export class BoAttrGridComponent implements OnInit {
 
   //@ts-ignore
-  @Input() boFields: BoRecordWithFields;
+  @Input() boWithFields: BoRecordWithFields;
 
-  constructor() {
+  toggleSubject = new Subject();
+
+  constructor(private coService: CoService) {
+    this.toggle();
   }
 
   ngOnInit(): void {
   }
 
-  clearCheck(): void {
-    StyleFieldF.clearCheck(this.boFields);
+  toggle(): void {
+    this.toggleSubject
+      .pipe(
+        tap(() => StyleFieldF.clearCheck(this.boWithFields)),
+        exhaustMap(() => this.coService.loadBoFieldsForCo(this.boWithFields)),
+      )
+      .subscribe();
   }
 }

@@ -3,7 +3,7 @@ import { BoAttrItemComponent } from 'src/app/components/composite-editor/bo/bo-a
 import { CdkDrag, CdkDragEnd, CdkDragEnter, CdkDragStart, CdkDropList } from '@angular/cdk/drag-drop';
 import { Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { DragService } from 'src/app/components/composite-editor/services/drag.service';
+import { DragService } from 'src/app/components/services/drag.service';
 
 @Directive()
 export class CommonSourceDragDirective {

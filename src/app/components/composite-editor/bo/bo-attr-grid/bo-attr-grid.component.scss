@@ -48,6 +48,11 @@
     }
   }
 
+  .right {
+    box-sizing: border-box;
+    border-bottom: var(--border-gray);
+  }
+
   .abs {
     position: absolute;
     display: flex;

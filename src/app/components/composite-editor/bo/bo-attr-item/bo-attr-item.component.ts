@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BoFieldView } from 'src/app/components/composite-editor/models/BoFieldView';
+import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
+import { BoRecordWithFields } from 'src/app/components/composite-editor/models/BoRecordWithFields';
 
 @Component({
   selector: 'app-bo-attr-item',
@@ -8,9 +9,11 @@ import { BoFieldView } from 'src/app/components/composite-editor/models/BoFieldV
 })
 export class BoAttrItemComponent implements OnInit {
 
+  // @ts-ignore
+  @Input() boWithFields: BoRecordWithFields;
 
   // @ts-ignore
-  @Input() field: BoFieldView;
+  @Input() field: BoFieldForCo;
 
   constructor() {
   }

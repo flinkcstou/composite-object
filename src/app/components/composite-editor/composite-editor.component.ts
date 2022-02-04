@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { CoService } from 'src/app/components/services/co.service';
+
 
 @Component({
   selector: 'app-composite-editor',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CompositeEditorComponent implements OnInit {
 
-  constructor() { }
+
+  // @ts-ignore
+  @ViewChild('save', {read: ElementRef}) saveElement: ElementRef;
+
+  // @ts-ignore
+  @ViewChild('cancel', {read: ElementRef}) cancelElement: ElementRef;
+
+  constructor(private coService: CoService) {
+  }
 
   ngOnInit(): void {
+    this.coService.generateFirstDraft().subscribe();
   }
 
 }

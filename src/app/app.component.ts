@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +10,6 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'composite-object';
 
   constructor(private matIconRegistry: MatIconRegistry,
               private readonly domSanitizer: DomSanitizer) {
@@ -19,3 +20,15 @@ export class AppComponent {
 
   }
 }
+
+
+// @ts-ignore
+export const logAndReturnEmpty: (err) => Observable<never> = err => {
+  console.error(err);
+  return EMPTY;
+};
+
+// @ts-ignore
+export const safeObserve: <T>(observable: Observable<T>, catcher?: (err) => Observable<T>) => Observable<T>
+  // @ts-ignore
+  = <T>(observable: Observable<T>, catcher: (err) => Observable<T> = logAndReturnEmpty) => observable.pipe(catchError(catcher));

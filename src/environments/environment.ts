@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  urlPrefix: 'http' + '://' + '192.168.11.23:1313' + '/web/',
+  apiPrefix: 'http' + '://' + '192.168.35.29:30610' + ':1313/api/',
 };
 
 /*

@@ -1,14 +1,18 @@
 import { BoRecord } from 'src/app/components/composite-editor/models/BoRecord';
-import { BoFieldView } from 'src/app/components/composite-editor/models/BoFieldView';
 import { StyleField } from 'src/app/components/composite-editor/models/StyleField';
+import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
 
 export interface BoRecordWithFields extends BoRecord, StyleField {
-  fields: BoFieldView[];
+  fields: BoFieldForCo[];
 }
 
 export const BoRecordWithFieldsF = {
-  toBoWithFields(boRecord: BoRecord, fields: BoFieldView[]): BoRecordWithFields {
-    return {...boRecord, fields} as BoRecordWithFields;
+  toBo(boRecord: BoRecord): BoRecordWithFields {
+    return {...boRecord} as BoRecordWithFields;
+  },
+  toFields(boRecordWithFields: BoRecordWithFields, boFieldsForCo: BoFieldForCo[]): BoRecordWithFields {
+    boRecordWithFields.fields = boFieldsForCo;
+    return boRecordWithFields;
   }
 };
 

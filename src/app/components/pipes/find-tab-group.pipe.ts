@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CoService } from 'src/app/components/composite-editor/services/co.service';
+import { CoService } from 'src/app/components/services/co.service';
+import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
 
 @Pipe({
   name: 'findTabGroup'
@@ -13,11 +14,11 @@ export class FindTabGroupPipe implements PipeTransform {
   }
 
   transform(value: unknown, ...args: unknown[]): unknown {
-    // tslint:disable-next-line:prefer-for-of
+    const fields = args[0] as BoFieldForCo[];
     if (!value) {
       return;
     }
-    for (const field of this.coService.tabGroupFields) {
+    for (const field of fields) {
       const tab = field.tabs.find(t => t?.id === value);
       if (!tab) {
         continue;
@@ -26,7 +27,7 @@ export class FindTabGroupPipe implements PipeTransform {
         return `Вкладка "${tab.label}"`;
       }
 
-      for (const innerField of this.coService.tabGroupFields) {
+      for (const innerField of fields) {
         const innerTab = innerField.tabs.find(t => t?.id === tab?.id);
         if (!innerField?.tabId) {
           continue;

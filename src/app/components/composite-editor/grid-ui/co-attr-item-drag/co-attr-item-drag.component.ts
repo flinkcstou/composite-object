@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragStart, CdkDropList } from '@angular/cdk/drag-drop';
-import { DragService } from 'src/app/components/composite-editor/services/drag.service';
+import { DragService } from 'src/app/components/services/drag.service';
 import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAttributeType';
 import { CommonSourceDragDirective } from 'src/app/components/composite-editor/grid-ui/common-source-drag.directive';
 

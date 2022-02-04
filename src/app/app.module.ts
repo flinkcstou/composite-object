@@ -27,6 +27,8 @@ import { CoAttrGroupDragComponent } from './components/composite-editor/grid-ui/
 import { CoAttrItemComponent } from './components/composite-editor/co/co-attr-item/co-attr-item.component';
 import { CoAttrItemDragComponent } from './components/composite-editor/grid-ui/co-attr-item-drag/co-attr-item-drag.component';
 import { FindTabGroupPipe } from './components/pipes/find-tab-group.pipe';
+import { environment } from 'src/environments/environment';
+import { HttpServiceModule } from 'src/app/components/services/lib/http-service.module';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,7 @@ import { FindTabGroupPipe } from './components/pipes/find-tab-group.pipe';
     CoAttrItemComponent,
     CoAttrItemDragComponent,
     FindTabGroupPipe,
+
   ],
   imports: [
     BrowserModule,
@@ -59,6 +62,7 @@ import { FindTabGroupPipe } from './components/pipes/find-tab-group.pipe';
     DragDropModule,
     MatIconModule,
     HttpClientModule,
+    HttpServiceModule.forRoot(environment.urlPrefix, environment.apiPrefix),
   ],
   providers: [],
   bootstrap: [AppComponent]
