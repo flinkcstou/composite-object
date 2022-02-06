@@ -19,6 +19,7 @@
       (cdkDragEntered)="entered($event, item)"
       (cdkDragEnded)="ended($event, replacementC, item)"
     >
+      <app-attr-drag-preview [isScope]="true" *cdkDragPreview></app-attr-drag-preview>
       <div #bodyC>
         <ng-container
           *ngIf="itemTemplateRef"

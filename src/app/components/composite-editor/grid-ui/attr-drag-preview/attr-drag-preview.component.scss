@@ -1,0 +1,62 @@
+.bo-item-drag-preview {
+
+  position: relative;
+  width: 265px;
+
+  left: -100px;
+  top: -10px;
+
+  &.scope {
+    background: #A182D3;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-sizing: border-box;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    border-radius: 5px;
+  }
+
+
+  .bo-item-drag-preview-child {
+    position: relative;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+
+    top: 0.5rem;
+    left: 0.5rem;
+
+    background: #A182D3;
+
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    border-radius: 5px;
+
+    &.scope-child {
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-sizing: border-box;
+    }
+
+    .title {
+      position: relative;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 18px;
+
+      color: #FFFFFF;
+    }
+
+    .icon {
+      color: #FFFFFF;
+    }
+
+
+  }
+}
