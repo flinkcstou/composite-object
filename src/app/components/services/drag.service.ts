@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAttributeType';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
+import { CoService } from 'src/app/components/services/co.service';
+import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +14,11 @@ export class DragService {
   public readonly coAttrItemsDrag = 'co-attr-items-drag';
   public readonly coAttrGroupDrag = 'co-attr-group-drag';
 
-  coAttributeTypes = [CoAttributeType.COMPOSITE, CoAttributeType.SIMPLE];
-
-  public coItems: any = []; // todo nabu change
 
   private boDraggableBehaviorSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public boDraggable$$: Observable<boolean> = this.boDraggableBehaviorSubject.asObservable();
 
-  constructor() {
+  constructor(private coService: CoService) {
   }
 
   set isBoDraggable(value: boolean) {
@@ -27,47 +26,31 @@ export class DragService {
   }
 
   expandCo(): void {
-    this.coItems.forEach((c: any) => c.isExpand = true);
+    this.coService.coWidgets.forEach((c: any) => c.isExpand = true);
+  }
+
+  isExpand(): boolean {
+    return this.coService.coWidgets.some((c: any) => !c?.isExpand);
   }
 
   toIdsBoDrag(): string[] {
-    const toIds = [];
-    this.coAttributeTypes.forEach((c) => {
-      [1, 2, 3, 4].forEach((v: number) => toIds.push(c + this.coAttrItemsDrag + v));
-    });
-    toIds.push(this.coAttrGroupDrag);
-    return toIds;
+    const simpleIds = this.coService.coFieldsSimple.map((i: CoFieldRecord) => i.coFieldId);
+    const compositeIds = this.coService.coFieldsComposite.map((i: CoFieldRecord) => i.coFieldId);
+    return [...simpleIds, ...compositeIds, this.coAttrGroupDrag];
   }
 
-  toIdsCoDrag(coAttributeType: CoAttributeType): string[] {
-    if (coAttributeType === CoAttributeType.SIMPLE) {
-      return this.toIdsCoDragSimple();
-    }
+  toIdsCoSimple(item: CoFieldRecord): string[] {
+    const simpleIds = this.coService.coFieldsSimple.filter((i: CoFieldRecord) => i.coFieldId !== item.coFieldId).map((i: CoFieldRecord) => i.coFieldId);
+    const compositeIds = this.coService.coFieldsComposite.map((i: CoFieldRecord) => i.coFieldId);
+    return [...simpleIds, ...compositeIds];
+  }
+
+  toIdsEmpty(): string[] {
     return [];
   }
 
-  toIdsSimple(items: number[]): string[] {
-    const toIds: string[] = [];
-    items.forEach((v: number) => toIds.push(CoAttributeType.SIMPLE + this.coAttrItemsDrag + v));
-    toIds.push(...this.toIdsCoDragSimple());
-    // toIds.push(this.coAttrGroupDrag);
-    return toIds;
-  }
 
-  toIdsCoDragComposite(): string[] {
-    const toIds: string[] = [];
-    [1, 2, 3, 4].forEach((v: number) => toIds.push(CoAttributeType.SIMPLE + this.coAttrItemsDrag + v));
-    return toIds;
-  }
-
-  toIdsCoDragSimple(): string[] {
-    const toIds: string[] = [];
-    [1, 2, 3, 4].forEach((v: number) => toIds.push(CoAttributeType.COMPOSITE + this.coAttrItemsDrag + v));
-    // toIds.push(this.coAttrGroupDrag);
-    return toIds;
-  }
-
-  dropDefault(event: CdkDragDrop<number[]>): void {
+  dropDefault(event: CdkDragDrop<any>): void {
     return;
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -79,5 +62,9 @@ export class DragService {
         event.currentIndex,
       );
     }
+  }
+
+  dropCoGroup(event: CdkDragDrop<BoFieldForCo[]>) {
+    this.coService.droptoCoGroup(event);
   }
 }

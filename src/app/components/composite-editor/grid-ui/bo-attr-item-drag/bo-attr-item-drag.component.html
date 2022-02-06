@@ -10,12 +10,14 @@
 >
   <ng-container *ngFor="let item of items">
     <div
-      class="bo-item-drag"
+      class="bo-item-drag bo-item-drag-origin "
+      [id]="item.fieldId"
       [class.check]="item?.isChecked"
+      [class.not-checked]="!item?.isChecked"
       cdkDrag
-      (cdkDragStarted)="started($event, bodyC, replacementC)"
-      (cdkDragEntered)="entered($event)"
-      (cdkDragEnded)="ended($event, replacementC)"
+      (cdkDragStarted)="started($event, bodyC, replacementC ,cdkDropList)"
+      (cdkDragEntered)="entered($event, item)"
+      (cdkDragEnded)="ended($event, replacementC, item)"
     >
       <div #bodyC>
         <ng-container
@@ -25,7 +27,11 @@
         ></ng-container>
       </div>
     </div>
-    <div #replacementC [class.show]="isReplacementShow" class="bo-item-drag-replacement"></div>
+    <div #replacementC
+         class="bo-item-drag bo-item-drag-replacement"
+         [class.show]="item.isReplacement"
+         [class.check]="item?.isChecked"
+         [class.not-checked]="!item?.isChecked"></div>
   </ng-container>
 
 </div>

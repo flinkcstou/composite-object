@@ -1,4 +1,4 @@
-export enum CoAttributeType {
+export enum CoWidgetType {
   COMPOSITE = 'COMPOSITE',
   SIMPLE = 'SIMPLE',
 }

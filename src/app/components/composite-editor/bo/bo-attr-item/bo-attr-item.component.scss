@@ -56,12 +56,15 @@
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
     height: 100%;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 
-    border-bottom: var(--border-gray);
     box-sizing: border-box;
+    border-bottom: var(--border-gray);
+    border-right: var(--border-gray);
+    z-index: 1;
 
     .title {
       font-style: normal;

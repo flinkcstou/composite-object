@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAttributeType';
+import { CoService } from 'src/app/components/services/co.service';
 
 @Component({
   selector: 'app-co-attr-group',
@@ -8,9 +8,11 @@ import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAt
 })
 export class CoAttrGroupComponent implements OnInit {
 
-  coAttributeTypes = [CoAttributeType.COMPOSITE, CoAttributeType.SIMPLE];
 
-  constructor() {
+  coWidgets: any[] = [];
+
+  constructor(private coService: CoService) {
+    this.coWidgets = this.coService.coWidgets;
   }
 
   ngOnInit(): void {

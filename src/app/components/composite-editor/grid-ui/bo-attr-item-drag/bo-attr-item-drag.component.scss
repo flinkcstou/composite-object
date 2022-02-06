@@ -1,3 +1,8 @@
+:host {
+  --border-chooser: 1px dashed rgba(35, 35, 35, 0.6);
+}
+
+// preview
 .cdk-drag-preview {
   background: #FFFFFF;
 
@@ -8,35 +13,58 @@
   0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
-.cdk-drag-placeholder {
-  background: #E4E4E4;
-}
 
-.bo-item-drag-replacement {
-  display: none;
-  background: #E4E4E4;
-
-  &.show {
-    display: block !important;
-  }
-
-}
-
-.draggable {
-  .bo-item-drag.check {
-    background: #E4E4E4;
-  }
-}
-
+//another sdkDropList placeholder
 ::ng-deep .co-items-drag.cdk-drop-list-dragging {
-
 
   .bo-item-drag.cdk-drag-placeholder {
     height: 0;
     width: 0;
     overflow: hidden;
+    display: block !important;
   }
 
+}
+
+//this placeholder
+
+.bo-item-drag-replacement {
+  display: none;
+}
+
+.bo-item-drag-replacement.show {
+  display: block !important;
+}
+
+.cdk-drag-placeholder {
+  background: #EDEFF0;
+}
+
+
+// check item
+.draggable {
+  .bo-item-drag.check {
+    @extend %chooser;
+  }
+}
+
+%chooser {
+
+  background: #EDEFF0;
+
+  ::ng-deep app-bo-attr-item {
+    border-top: var(--border-chooser);
+
+    .left {
+      border-left: var(--border-chooser);
+      border-bottom: var(--border-chooser);
+    }
+
+    .right {
+      border-bottom: var(--border-chooser);
+      border-right: var(--border-chooser);
+    }
+  }
 }
 
 

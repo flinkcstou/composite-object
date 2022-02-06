@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAttributeType';
+import { CoWidget } from 'src/app/components/composite-editor/models/CoWidget';
+import { CoWidgetType } from 'src/app/components/composite-editor/models/CoWidgetType';
 
 @Component({
   selector: 'app-co-attr-grid',
@@ -9,14 +10,8 @@ import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAt
 export class CoAttrGridComponent implements OnInit {
 
   // @ts-ignore
-  @Input() coAttributeType: CoAttributeType = CoAttributeType.COMPOSITE;
-
-  CoAttributeType = CoAttributeType;
-  items: any[] = [1, 2, 3, 4];
-  coItem = {
-    isExpand: false
-  };
-
+  @Input() coWidget: CoWidget;
+  CoWidgetType = CoWidgetType;
 
   constructor() {
   }

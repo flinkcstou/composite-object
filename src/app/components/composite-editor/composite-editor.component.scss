@@ -9,19 +9,24 @@
     overflow-y: auto;
   }
 
-  .border-right {
-    box-sizing: border-box;
-    border-right: var(--border-gray);
-  }
 
   .vertical-line {
     height: 100%;
     position: absolute;
     top: 0;
-    left: 0;
     width: 1px;
+    box-sizing: border-box;
     border-left: var(--border-gray);
-    margin-left: 99px;
+
+    &.left {
+      right: 0;
+      margin-right: 0px;
+    }
+
+    &.right {
+      left: 0;
+      margin-left: 99px;
+    }
   }
 
   .abs {

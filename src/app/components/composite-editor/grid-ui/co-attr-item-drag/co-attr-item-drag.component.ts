@@ -1,31 +1,21 @@
-import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragStart, CdkDropList } from '@angular/cdk/drag-drop';
 import { DragService } from 'src/app/components/services/drag.service';
-import { CoAttributeType } from 'src/app/components/composite-editor/models/CoAttributeType';
 import { CommonSourceDragDirective } from 'src/app/components/composite-editor/grid-ui/common-source-drag.directive';
+import { CoWidget } from 'src/app/components/composite-editor/models/CoWidget';
+import { CoWidgetType } from '../../models/CoWidgetType';
+import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
 
 @Component({
   selector: 'app-co-attr-item-drag',
   templateUrl: './co-attr-item-drag.component.html',
   styleUrls: ['./co-attr-item-drag.component.scss']
 })
-export class CoAttrItemDragComponent extends CommonSourceDragDirective implements OnInit {
-
+export class CoAttrItemDragComponent extends CommonSourceDragDirective<CoFieldRecord> implements OnInit {
 
   // @ts-ignore
-  _coAttributeType: CoAttributeType = CoAttributeType.COMPOSITE;
-
-  CoAttributeType = CoAttributeType;
-
-  @Input() set coAttributeType(value: CoAttributeType) {
-    this._coAttributeType = value;
-    this.toIds = this.dragService.toIdsCoDrag(this._coAttributeType);
-  }
-
-  @Input() set coItem(value: any) {
-    this.dragService.coItems.push(value);
-  }
-
+  @Input() coWidget: CoWidget;
+  CoWidgetType = CoWidgetType;
 
   constructor(protected dragService: DragService) {
     super(dragService, dragService.coAttrItemsDrag);
@@ -34,24 +24,22 @@ export class CoAttrItemDragComponent extends CommonSourceDragDirective implement
   ngOnInit(): void {
   }
 
-  drop(event: CdkDragDrop<number[]>): void {
+  drop(event: CdkDragDrop<any>): void {
     this.dragService.dropDefault(event);
   }
 
-  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement, item: any, cdkDropList: CdkDropList): void {
-    const dynamicIds = this.items.filter((i: number) => i !== item);
-    this.toIds = this.dragService.toIdsSimple(dynamicIds);
+  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement, item: CoFieldRecord, cdkDropList: CdkDropList): void {
+    this.toIds = this.dragService.toIdsCoSimple(item);
     cdkDropList.connectedTo = this.toIds;
-
     this.cdkDragStarted($event, bodyC, replacementC);
   }
 
-  entered($event: CdkDragEnter<any>): void {
-    this.cdkDragEntered($event);
+  entered($event: CdkDragEnter<any>, item: CoFieldRecord): void {
+    this.cdkDragEntered($event, item);
   }
 
-  ended($event: CdkDragEnd, replacementC: HTMLElement): void {
-    this.cdkDragEnded($event, replacementC);
-    this.toIds = this.dragService.toIdsCoDrag(this._coAttributeType);
+  ended($event: CdkDragEnd, replacementC: HTMLElement, item: CoFieldRecord): void {
+    this.cdkDragEnded($event, replacementC, item);
+    this.toIds = this.dragService.toIdsEmpty();
   }
 }

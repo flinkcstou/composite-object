@@ -4,11 +4,13 @@ import { CdkDrag, CdkDragEnd, CdkDragEnter, CdkDragStart, CdkDropList } from '@a
 import { Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { DragService } from 'src/app/components/services/drag.service';
+import { StyleField } from 'src/app/components/composite-editor/models/StyleField';
 
 @Directive()
-export class CommonSourceDragDirective {
+export class CommonSourceDragDirective<T extends StyleField> {
 
-  @Input() public items: any;
+  // @ts-ignore
+  @Input() public items: T[];
 
   // @ts-ignore
   @ContentChild('item', {static: false}) public itemTemplateRef: TemplateRef<BoAttrItemComponent>;
@@ -20,7 +22,6 @@ export class CommonSourceDragDirective {
 
   public toIds: string[] = [];
 
-  public isReplacementShow = false;
   public isDraggable = false;
 
   constructor(protected dragService: DragService, public id: string) {
@@ -53,7 +54,7 @@ export class CommonSourceDragDirective {
   }
 
   setPosition($event: CdkDragStart): void {
-    if (this.dragService.coItems.some((c: any) => !c?.isExpand)) {
+    if (this.dragService.isExpand()) {
       this.updatePositionSubject.next($event);
     }
     this.dragService.expandCo();
@@ -65,23 +66,34 @@ export class CommonSourceDragDirective {
 
   setIsDraggable(value: boolean): void {
     this.isDraggable = value;
+    this.setIsBoDraggable(value);
+    this.setIsCoDraggable(value);
+
+  }
+
+  setIsBoDraggable(value: boolean): void {
     if (this.id === this.dragService.boAttrItemsDrag) {
       this.dragService.isBoDraggable = value;
     }
   }
+
+  setIsCoDraggable(value: boolean): void {
+
+  }
+
 
   cdkDragStarted($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement): void {
     this.setIsDraggable(true);
     replacementC.innerHTML = bodyC.innerHTML;
   }
 
-  cdkDragEntered($event: CdkDragEnter<any>): void {
-    this.isReplacementShow = !$event.container.id.includes(this.id);
+  cdkDragEntered($event: CdkDragEnter<T>, item: T): void {
+    item.isReplacement = !$event.container.id.includes(this.id);
   }
 
-  cdkDragEnded($event: CdkDragEnd, replacementC: HTMLElement): void {
+  cdkDragEnded($event: CdkDragEnd, replacementC: HTMLElement, item: T): void {
     this.setIsDraggable(false);
-    this.isReplacementShow = false;
+    item.isReplacement = false;
     replacementC.innerHTML = '';
   }
 

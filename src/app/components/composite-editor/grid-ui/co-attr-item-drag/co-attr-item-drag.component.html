@@ -5,20 +5,20 @@
   #cdkDropList="cdkDropList"
   cdkDropListSortingDisabled
 
-  [id]="_coAttributeType + id+item"
-  [class.cursor]="_coAttributeType===CoAttributeType.SIMPLE"
-  [class.simple]="_coAttributeType===CoAttributeType.SIMPLE"
-  [class.composite]="_coAttributeType===CoAttributeType.COMPOSITE"
-  [cdkDropListDisabled]="_coAttributeType!==CoAttributeType.SIMPLE"
+  [id]="item.coFieldId"
+  [class.cursor]="coWidget.coWidgetType===CoWidgetType.SIMPLE"
+  [class.simple]="coWidget.coWidgetType===CoWidgetType.SIMPLE"
+  [class.composite]="coWidget.coWidgetType===CoWidgetType.COMPOSITE"
+  [cdkDropListDisabled]="coWidget.coWidgetType!==CoWidgetType.SIMPLE"
   [cdkDropListData]="[item]"
   [cdkDropListConnectedTo]="toIds"
   (cdkDropListDropped)="drop($event)"
   [cdkDropListSortPredicate]="sortPredicate"
 >
   <div class="co-item-drag"
-       (cdkDragStarted)="started($event, bodyC, replacementC, item, cdkDropList )"
-       (cdkDragEntered)="entered($event)"
-       (cdkDragEnded)="ended($event, replacementC)"
+       (cdkDragStarted)="started($event, bodyC, replacementC, item, cdkDropList)"
+       (cdkDragEntered)="entered($event, item)"
+       (cdkDragEnded)="ended($event, replacementC, item)"
        cdkDrag>
 
     <div class="custom-placeholder" *cdkDragPlaceholder></div>

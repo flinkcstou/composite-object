@@ -9,6 +9,11 @@ import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoField
 import { CompositeObject } from 'src/app/components/composite-editor/models/CompositeObject';
 import { BoRecord } from 'src/app/components/composite-editor/models/BoRecord';
 import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/composite-editor/models/BoRecordWithFields';
+import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
+import { BoFieldLink, BoFieldLinkF } from 'src/app/components/composite-editor/models/BoFieldLink';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CoWidgetF } from 'src/app/components/composite-editor/models/CoWidget';
+import { CoWidgetType } from 'src/app/components/composite-editor/models/CoWidgetType';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +21,15 @@ import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/comp
 export class CoService {
 
   boRecordsWithFields: BoRecordWithFields[] = [];
+
+
+  coFieldsSimple: CoFieldRecord[] = [];
+  coFieldsComposite: CoFieldRecord[] = [];
+
+  coWidgets: any[] = [
+    CoWidgetF.create(CoWidgetType.COMPOSITE, this.coFieldsComposite),
+    CoWidgetF.create(CoWidgetType.SIMPLE, this.coFieldsSimple)
+  ];
 
   public changedSubject: Subject<void> = new Subject<void>();
 
@@ -92,4 +106,21 @@ export class CoService {
   }
 
 
+  droptoCoGroup(event: CdkDragDrop<BoFieldForCo[]>): void {
+    const prevField: BoFieldForCo = event.previousContainer.data[event.previousIndex];
+    const fieldLinks: BoFieldLink[] = [];
+    this.boRecordsWithFields.forEach(bo => {
+      if (!bo.fields) {
+        return;
+      }
+      bo.fields.forEach(field => {
+        if (field.isChecked || prevField.fieldId === field.fieldId) {
+          fieldLinks.push(BoFieldLinkF.create(bo.id, field.fieldId));
+        }
+      });
+    });
+    this.coController.addCoFieldToSimple(this.bo.id, this.draftId, fieldLinks).subscribe((coFields) => {
+      this.coFieldsSimple.push(...coFields);
+    });
+  }
 }

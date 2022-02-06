@@ -4,6 +4,7 @@ export interface StyleField {
   isChecked: boolean;
   isExpand: boolean;
   hover: boolean;
+  isReplacement: boolean;
 }
 
 export const StyleFieldF = {
