@@ -3,10 +3,10 @@
      cdkDropList
      #cdkDropList="cdkDropList"
      cdkDropListSortingDisabled
+     [cdkDropListSortPredicate]="sortPredicate"
      [class.draggable]="isDraggable"
      [cdkDropListData]="items"
      [cdkDropListConnectedTo]="toIds"
-     (cdkDropListDropped)="drop($event)"
 >
   <ng-container *ngFor="let item of items">
     <div

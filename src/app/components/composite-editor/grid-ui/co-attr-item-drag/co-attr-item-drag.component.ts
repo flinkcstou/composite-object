@@ -24,8 +24,8 @@ export class CoAttrItemDragComponent extends CommonSourceDragDirective<CoFieldRe
   ngOnInit(): void {
   }
 
-  drop(event: CdkDragDrop<any>): void {
-    this.dragService.dropDefault(event);
+  drop(event: CdkDragDrop<CoFieldRecord[]>): void {
+    this.dragService.dropCoComposite(event);
   }
 
   started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement, item: CoFieldRecord, cdkDropList: CdkDropList): void {

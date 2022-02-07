@@ -64,7 +64,11 @@ export class DragService {
     }
   }
 
-  dropCoGroup(event: CdkDragDrop<BoFieldForCo[]>) {
-    this.coService.droptoCoGroup(event);
+  dropCoComposite(event: CdkDragDrop<CoFieldRecord[]>): void {
+    this.coService.dropToCoComposite(event);
+  }
+
+  dropCoGroup(event: CdkDragDrop<BoFieldForCo[]>): void {
+    this.coService.dropToCoGroup(event);
   }
 }

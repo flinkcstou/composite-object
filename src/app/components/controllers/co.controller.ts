@@ -27,6 +27,12 @@ export class CoController {
       .pipe(map(response => response.body)) as Observable<BoRecord>;
   }
 
+  removeBoFromCo(coId: string, draftId: string, boId: string): Observable<void> {
+    return this.http.post<void>('/remove-bo-from-co', {coId, draftId, boId})
+      .pipe(map(response => response.body)) as Observable<void>;
+  }
+
+
   loadBoRecordsForCo(coId: string, draftId: string): Observable<BoRecord[]> {
     return this.http.post<BoRecord[]>('/load-bo-records-for-co', {coId, draftId})
       .pipe(map(response => response.body)) as Observable<BoRecord[]>;
@@ -53,22 +59,26 @@ export class CoController {
   }
 
   addCoFieldToSimple(coId: string, draftId: string, boFieldLinks: BoFieldLink[]): Observable<CoFieldRecord[]> {
-
-    // todo nabu
-    const fields: CoFieldRecord[] = [];
-    boFieldLinks.forEach((boField) => {
-      const coField: CoFieldRecord = {
-        coFieldId: 'sdfsdfsdfsdf' + boField.fieldId,
-        type: 'dafdsfds',
-        links: [boField],
-        label: boField.fieldId
-      } as CoFieldRecord;
-      fields.push(coField);
-    });
-
-    return of(fields);
     return this.http.post<CoFieldRecord[]>('/add-co-field-to-simple', {coId, draftId, boFieldLinks})
       .pipe(map(response => response.body)) as Observable<CoFieldRecord[]>;
+  }
+
+  addCoFieldToComposite(coId: string, draftId: string,
+                        boFieldLinks: BoFieldLink[], coFieldId: string): Observable<CoFieldRecord> {
+    return this.http.post<CoFieldRecord>('/add-co-field-to-composite', {coId, draftId, boFieldLinks, coFieldId})
+      .pipe(map(response => response.body)) as Observable<CoFieldRecord>;
+  }
+
+  removeCoField(coId: string, draftId: string, coFieldId: string): Observable<void> {
+
+    return this.http.post<void>('/remove-co-field', {coId, draftId, coFieldId})
+      .pipe(map(response => response.body)) as Observable<void>;
+  }
+
+  removeBoFieldLink(coId: string, draftId: string,
+                    coFieldId: string, boFieldLink: BoFieldLink | undefined): Observable<void> {
+    return this.http.post<void>('/remove-bo-field-link', {coId, draftId, coFieldId, boFieldLink})
+      .pipe(map(response => response.body)) as Observable<void>;
   }
 
 }

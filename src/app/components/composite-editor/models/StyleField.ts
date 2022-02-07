@@ -5,6 +5,7 @@ export interface StyleField {
   isExpand: boolean;
   hover: boolean;
   isReplacement: boolean;
+  showLeaderLine: boolean;
 }
 
 export const StyleFieldF = {

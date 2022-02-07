@@ -32,4 +32,8 @@ export class BoAttrGridComponent implements OnInit {
       )
       .subscribe();
   }
+
+  removeBo(): void {
+    this.coService.removeBo(this.boWithFields);
+  }
 }

@@ -23,4 +23,7 @@ export class CoAttrItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  remove() {
+
+  }
 }

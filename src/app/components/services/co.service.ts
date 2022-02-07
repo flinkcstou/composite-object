@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { concatMap, filter, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { CoController } from 'src/app/components/controllers/co.controller';
 import { BoController } from 'src/app/components/controllers/bo.controller';
 import { EditingService } from 'src/app/components/services/editing.service';
@@ -14,6 +14,8 @@ import { BoFieldLink, BoFieldLinkF } from 'src/app/components/composite-editor/m
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { CoWidgetF } from 'src/app/components/composite-editor/models/CoWidget';
 import { CoWidgetType } from 'src/app/components/composite-editor/models/CoWidgetType';
+import { BoFieldForCoWIthBoId, BoFieldForCoWIthBoIdF } from 'src/app/components/composite-editor/models/BoFieldForCoWIthBoId';
+import { LeaderLineDraw } from 'src/app/components/composite-editor/models/LeaderLineDraw';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +32,9 @@ export class CoService {
     CoWidgetF.create(CoWidgetType.COMPOSITE, this.coFieldsComposite),
     CoWidgetF.create(CoWidgetType.SIMPLE, this.coFieldsSimple)
   ];
+
+  leaderLines: LeaderLineDraw[] = [];
+  leaderLineSubject: Subject<boolean> = new Subject();
 
   public changedSubject: Subject<void> = new Subject<void>();
 
@@ -106,21 +111,71 @@ export class CoService {
   }
 
 
-  droptoCoGroup(event: CdkDragDrop<BoFieldForCo[]>): void {
-    const prevField: BoFieldForCo = event.previousContainer.data[event.previousIndex];
-    const fieldLinks: BoFieldLink[] = [];
-    this.boRecordsWithFields.forEach(bo => {
-      if (!bo.fields) {
-        return;
-      }
-      bo.fields.forEach(field => {
-        if (field.isChecked || prevField.fieldId === field.fieldId) {
-          fieldLinks.push(BoFieldLinkF.create(bo.id, field.fieldId));
-        }
-      });
+  dropToCoGroup(event: CdkDragDrop<BoFieldForCo[]>) {
+
+    const coFields = [...this.coFieldsComposite, ...this.coFieldsSimple];
+    const fields: BoFieldForCoWIthBoId[] = [].concat.apply([], this.boRecordsWithFields.map((bo) => bo.fields.map(field => BoFieldForCoWIthBoIdF.create(bo.id, field))) as any[]);
+    const checkedUniqueFields = fields.filter((field) => field.isChecked && !coFields.some((coField) => coField.links.some((link) => link.fieldId === field.fieldId)));
+    if (!checkedUniqueFields.length) {
+      return;
+    }
+    const boFieldLinks = checkedUniqueFields.map((field) => BoFieldLinkF.create(field.boId, field.fieldId));
+    this.coController.addCoFieldToSimple(this.bo.id, this.draftId, boFieldLinks).subscribe((coFieldRecords) => {
+      this.coFieldsSimple.push(...coFieldRecords);
     });
-    this.coController.addCoFieldToSimple(this.bo.id, this.draftId, fieldLinks).subscribe((coFields) => {
-      this.coFieldsSimple.push(...coFields);
+  }
+
+  dropToCoComposite(event: CdkDragDrop<CoFieldRecord[]> | CdkDragDrop<BoFieldForCo[]>): void {
+    if (event.previousContainer.data.length === 1 && 'coFieldId' in event.previousContainer.data[0]) {
+      this.dropToCoCompositeByCoField(event as CdkDragDrop<CoFieldRecord[]>);
+    }
+    this.dropToCoCompositeByBoField(event as CdkDragDrop<BoFieldForCo[]>);
+  }
+
+  dropToCoCompositeByBoField(event: CdkDragDrop<BoFieldForCo[]>): void {
+
+  }
+
+  dropToCoCompositeByCoField(event: CdkDragDrop<CoFieldRecord[]>): void {
+    const prevField = event.previousContainer.data[0];
+    const currentField = event.container.data[0];
+    if (prevField.type !== currentField.type) {
+      return;
+    }
+    if (prevField.coFieldId === currentField.coFieldId) {
+      return;
+    }
+    const links = [...prevField.links, ...currentField.links];
+
+    console.error(JSON.parse(JSON.stringify(prevField)));
+    console.error(JSON.parse(JSON.stringify(currentField)));
+    this.coFieldsSimple.splice(this.coFieldsSimple.findIndex((field) => field.coFieldId === prevField.coFieldId), 1);
+    this.coFieldsSimple.splice(this.coFieldsSimple.findIndex((field) => field.coFieldId === currentField.coFieldId), 1);
+    this.coController.addCoFieldToComposite(this.bo.id, this.draftId, links, currentField.coFieldId)
+      .pipe(
+        tap((coField) => {
+          const currentCoField = this.coFieldsComposite.find((c) => c.coFieldId === coField.coFieldId);
+          if (currentCoField) {
+            currentCoField.links = coField.links;
+            return;
+          }
+          this.coFieldsComposite.push(coField);
+        }),
+        concatMap(() => forkJoin([this.coController.removeCoField(this.bo.id, this.draftId, prevField.coFieldId), this.coController.removeCoField(this.bo.id, this.draftId, currentField.coFieldId)]))
+      )
+      .subscribe();
+
+  }
+
+  removeBo(boWithFields: BoRecordWithFields): void {
+    this.coController.removeBoFromCo(this.bo.id, this.draftId, boWithFields.id).subscribe(() => {
+      const index = this.boRecordsWithFields.findIndex(bo => bo.id === boWithFields.id);
+      this.boRecordsWithFields.splice(index, 1);
     });
+
+  }
+
+  removeLink(coFieldId: string, boFieldLink: BoFieldLink | undefined): void {
+    this.coController.removeBoFieldLink(this.bo.id, this.draftId, coFieldId, boFieldLink).subscribe();
   }
 }

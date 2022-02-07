@@ -30,6 +30,7 @@ import { FindTabGroupPipe } from './components/pipes/find-tab-group.pipe';
 import { environment } from 'src/environments/environment';
 import { HttpServiceModule } from 'src/app/components/services/lib/http-service.module';
 import { AttrDragPreviewComponent } from './components/composite-editor/grid-ui/attr-drag-preview/attr-drag-preview.component';
+import { LeaderLineDirective } from './directives/leader-line.directive';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { AttrDragPreviewComponent } from './components/composite-editor/grid-ui/
     CoAttrItemDragComponent,
     FindTabGroupPipe,
     AttrDragPreviewComponent,
+    LeaderLineDirective,
 
   ],
   imports: [
