@@ -1,14 +1,32 @@
 import { BoRecord } from 'src/app/components/composite-editor/models/BoRecord';
 import { StyleField } from 'src/app/components/composite-editor/models/StyleField';
 import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
+import { Subject } from 'rxjs';
 
-export interface BoRecordWithFields extends BoRecord, StyleField {
+export class BoRecordWithFields implements BoRecord, StyleField {
   fields: BoFieldForCo[];
+  hover: boolean;
+  isChecked: boolean;
+  isExpand: boolean;
+  isReplacement: boolean;
+  linkLeaderLine: boolean;
+  id: string;
+  name: string;
+
+  toggleSubject: Subject<string> = new Subject<string>();
+  removeSubject: Subject<string> = new Subject<string>();
+
+  constructor({id, name}: BoRecord) {
+    this.id = id;
+    this.name = name;
+
+  }
+
 }
 
 export const BoRecordWithFieldsF = {
   toBo(boRecord: BoRecord): BoRecordWithFields {
-    return {...boRecord} as BoRecordWithFields;
+    return new BoRecordWithFields(boRecord) as BoRecordWithFields;
   },
   toFields(boRecordWithFields: BoRecordWithFields, boFieldsForCo: BoFieldForCo[]): BoRecordWithFields {
     boRecordWithFields.fields = boFieldsForCo;

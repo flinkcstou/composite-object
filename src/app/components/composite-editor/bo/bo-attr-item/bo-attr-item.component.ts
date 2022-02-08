@@ -14,28 +14,9 @@ export class BoAttrItemComponent implements OnInit {
 
   @Input() field: BoFieldForCo | undefined;
 
-  private leaderLineDraw: any;
-
-  constructor(private coService: CoService) {
-    this.coService.leaderLineSubject.asObservable().subscribe((bool) => {
-      this.leaderLineDraw = this.coService.leaderLines.find((leaderLine) => leaderLine.field.showLeaderLine && leaderLine.field.links.some((link) => this.field?.fieldId === link.fieldId));
-      this.isShowLeader = !!this.leaderLineDraw;
-
-    });
+  constructor() {
   }
-
-  @HostBinding('class.show-leader') isShowLeader = false;
 
   ngOnInit(): void {
-  }
-
-  remove($event: MouseEvent): any {
-    $event.stopPropagation();
-    $event.preventDefault();
-    this.leaderLineDraw?.removeSubject?.next(this.field?.fieldId);
-  }
-
-  changeColor(value: string): void {
-    this.leaderLineDraw?.changeColorSubject?.next(value);
   }
 }

@@ -14,5 +14,7 @@
 </div>
 <div class="abs">
   <mat-icon svgIcon="no-color-setting"></mat-icon>
-  <mat-icon (click)="remove($event)" svgIcon="no-color-remove"></mat-icon>
+  <mat-icon #removeCo clickStopPropagation svgIcon="no-color-remove"></mat-icon>
 </div>
+<ng-container *ngIf="remove$ | async"></ng-container>
+

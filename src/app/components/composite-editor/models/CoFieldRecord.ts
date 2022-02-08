@@ -11,3 +11,16 @@ export interface CoFieldRecord extends StyleField {
   links: BoFieldLink[];
 
 }
+
+export const CoFieldRecordF = {
+
+  findIndex(coField: CoFieldRecord, coFields: CoFieldRecord[]): number {
+    return coFields.findIndex((field) => field.coFieldId === coField.coFieldId);
+  },
+  remove(coField: CoFieldRecord, coFields: CoFieldRecord[]): void {
+    const index = CoFieldRecordF.findIndex(coField, coFields);
+    if (index !== -1) {
+      coFields.splice(index, 1);
+    }
+  }
+};

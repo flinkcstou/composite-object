@@ -1,39 +1,47 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/composite-editor/models/BoRecordWithFields';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { BoRecordWithFields } from 'src/app/components/composite-editor/models/BoRecordWithFields';
 import { StyleFieldF } from 'src/app/components/composite-editor/models/StyleField';
 import { CoService } from 'src/app/components/services/co.service';
-import { Subject } from 'rxjs';
-import { exhaustMap, switchMap, tap } from 'rxjs/operators';
+import { fromEvent, Observable, of, Subject } from 'rxjs';
+import { exhaustMap, mapTo, tap } from 'rxjs/operators';
+import { CoChangeService } from 'src/app/components/services/co-change.service';
 
 @Component({
   selector: 'app-bo-attr-grid',
   templateUrl: './bo-attr-grid.component.html',
   styleUrls: ['./bo-attr-grid.component.scss']
 })
-export class BoAttrGridComponent implements OnInit {
+export class BoAttrGridComponent implements OnInit, OnChanges, AfterViewInit {
 
-  //@ts-ignore
   @Input() boWithFields: BoRecordWithFields;
 
-  toggleSubject = new Subject();
+  @ViewChild('removeBo') removeBo: ElementRef<HTMLDivElement>;
 
-  constructor(private coService: CoService) {
-    this.toggle();
+  load$: Observable<any>;
+  remove$: Observable<any>;
+
+  constructor(private coService: CoService,
+              private coChangeService: CoChangeService) {
   }
 
   ngOnInit(): void {
   }
 
-  toggle(): void {
-    this.toggleSubject
+  ngOnChanges(changes: SimpleChanges): void {
+    this.load$ = this.boWithFields.toggleSubject
       .pipe(
+        tap(() => this.coChangeService.toggleBoSubject.next(this.boWithFields.id)),
         tap(() => StyleFieldF.clearCheck(this.boWithFields)),
-        exhaustMap(() => this.coService.loadBoFieldsForCo(this.boWithFields)),
-      )
-      .subscribe();
+        exhaustMap(() => this.coService.loadBoFieldsForCo(this.boWithFields))
+      );
   }
 
-  removeBo(): void {
-    this.coService.removeBo(this.boWithFields);
+  ngAfterViewInit(): void {
+    this.remove$ = fromEvent(this.removeBo.nativeElement, 'click')
+      .pipe(
+        exhaustMap(() => this.coService.removeBo(this.boWithFields)),
+        tap(() => this.boWithFields.removeSubject.next(this.boWithFields.id)),
+        tap(() => this.coChangeService.removeBoSubject.next(this.boWithFields.id))
+      );
   }
 }

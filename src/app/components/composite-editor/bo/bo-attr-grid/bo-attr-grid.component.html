@@ -3,7 +3,7 @@
     <div [title]="boWithFields?.name" class="title">
       {{boWithFields?.name}}
     </div>
-    <div (click)="removeBo()" class="icon">
+    <div #removeBo class="icon">
       <mat-icon svgIcon="no-color-remove"></mat-icon>
     </div>
   </div>
@@ -11,7 +11,6 @@
 <div class="right">
   <app-bo-attr-item-first *ngIf="!boWithFields?.isExpand"
                           [id]="boWithFields.id"
-                          (toggleEmit)="toggleSubject.next()"
                           [appToggleClass]="boWithFields"></app-bo-attr-item-first>
   <app-expansion-panel *ngIf="boWithFields.isExpand"
                        [defaultExpanded]="boWithFields.isExpand">
@@ -29,8 +28,10 @@
 </div>
 <div class="abs">
   <div class="icon">
-    <mat-icon svgIcon="no-color-arrow" [class.expand]="boWithFields.isExpand" (toggleEmit)="toggleSubject.next()"
+    <mat-icon svgIcon="no-color-arrow" [class.expand]="boWithFields.isExpand"
               [appToggleClass]="boWithFields"></mat-icon>
   </div>
 </div>
+<ng-container *ngIf="load$| async"></ng-container>
+<ng-container *ngIf="remove$ | async"></ng-container>
 

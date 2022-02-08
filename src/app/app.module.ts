@@ -31,6 +31,8 @@ import { environment } from 'src/environments/environment';
 import { HttpServiceModule } from 'src/app/components/services/lib/http-service.module';
 import { AttrDragPreviewComponent } from './components/composite-editor/grid-ui/attr-drag-preview/attr-drag-preview.component';
 import { LeaderLineDirective } from './directives/leader-line.directive';
+import { LinkLeaderLineDirective } from './directives/link-leader-line.directive';
+import { ClickStopPropagationDirective } from 'src/app/directives/click-stop-propagation.directive';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import { LeaderLineDirective } from './directives/leader-line.directive';
     FindTabGroupPipe,
     AttrDragPreviewComponent,
     LeaderLineDirective,
+    LinkLeaderLineDirective,
+    ClickStopPropagationDirective
 
   ],
   imports: [

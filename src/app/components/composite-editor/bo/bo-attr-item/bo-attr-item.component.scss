@@ -10,13 +10,6 @@
 
   cursor: pointer;
 
-  &.show-leader {
-    .abs {
-      opacity: 1;
-      z-index: 3;
-    }
-  }
-
   &.check .left .icon {
     color: #2f80ed
 
@@ -84,6 +77,11 @@
   }
 
   .abs {
+    &.link-leader-line {
+      opacity: 1;
+      z-index: 3;
+    }
+
     position: absolute;
     display: flex;
     align-items: center;

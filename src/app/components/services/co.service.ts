@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable, of, Subject } from 'rxjs';
-import { concatMap, filter, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, Observable, ObservedValuesFromArray, of, Subject } from 'rxjs';
+import { concatMap, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { CoController } from 'src/app/components/controllers/co.controller';
 import { BoController } from 'src/app/components/controllers/bo.controller';
 import { EditingService } from 'src/app/components/services/editing.service';
@@ -9,13 +9,14 @@ import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoField
 import { CompositeObject } from 'src/app/components/composite-editor/models/CompositeObject';
 import { BoRecord } from 'src/app/components/composite-editor/models/BoRecord';
 import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/composite-editor/models/BoRecordWithFields';
-import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
+import { CoFieldRecord, CoFieldRecordF } from 'src/app/components/composite-editor/models/CoFieldRecord';
 import { BoFieldLink, BoFieldLinkF } from 'src/app/components/composite-editor/models/BoFieldLink';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { CoWidgetF } from 'src/app/components/composite-editor/models/CoWidget';
 import { CoWidgetType } from 'src/app/components/composite-editor/models/CoWidgetType';
 import { BoFieldForCoWIthBoId, BoFieldForCoWIthBoIdF } from 'src/app/components/composite-editor/models/BoFieldForCoWIthBoId';
 import { LeaderLineDraw } from 'src/app/components/composite-editor/models/LeaderLineDraw';
+import { CoChangeService } from 'src/app/components/services/co-change.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,6 @@ export class CoService {
   ];
 
   leaderLines: LeaderLineDraw[] = [];
-  leaderLineSubject: Subject<boolean> = new Subject();
 
   public changedSubject: Subject<void> = new Subject<void>();
 
@@ -54,7 +54,8 @@ export class CoService {
 
   constructor(private coController: CoController,
               private boController: BoController,
-              private editingService: EditingService) {
+              private editingService: EditingService,
+              private coChangeService: CoChangeService) {
 
     // this.changedSubject.pipe(
     //   mergeMap(() => this.loadBoRecordsForCo())
@@ -147,39 +148,39 @@ export class CoService {
     }
     const links = [...prevField.links, ...currentField.links];
 
-    console.error(JSON.parse(JSON.stringify(prevField)));
-    console.error(JSON.parse(JSON.stringify(currentField)));
-    this.coFieldsSimple.splice(this.coFieldsSimple.findIndex((field) => field.coFieldId === prevField.coFieldId), 1);
-    this.coFieldsSimple.splice(this.coFieldsSimple.findIndex((field) => field.coFieldId === currentField.coFieldId), 1);
+    this.coFieldsComposite.push(currentField);
+    currentField.links = links;
+    
+    CoFieldRecordF.remove(prevField, this.coFieldsSimple);
+    CoFieldRecordF.remove(currentField, this.coFieldsSimple);
+    this.coChangeService.removeCoFieldSubject.next(prevField.coFieldId);
+
     this.coController.addCoFieldToComposite(this.bo.id, this.draftId, links, currentField.coFieldId)
+      .pipe(switchMap(() => this.removeCoField(prevField)), take(1)).subscribe();
+
+  }
+
+  removeBo(boWithFields: BoRecordWithFields): Observable<void> {
+    return this.coController.removeBoFromCo(this.bo.id, this.draftId, boWithFields.id)
       .pipe(
-        tap((coField) => {
-          const currentCoField = this.coFieldsComposite.find((c) => c.coFieldId === coField.coFieldId);
-          if (currentCoField) {
-            currentCoField.links = coField.links;
-            return;
+        tap(() => {
+            const index = this.boRecordsWithFields.findIndex(bo => bo.id === boWithFields.id);
+            this.boRecordsWithFields.splice(index, 1);
           }
-          this.coFieldsComposite.push(coField);
-        }),
-        concatMap(() => forkJoin([this.coController.removeCoField(this.bo.id, this.draftId, prevField.coFieldId), this.coController.removeCoField(this.bo.id, this.draftId, currentField.coFieldId)]))
-      )
-      .subscribe();
-
+        ));
   }
 
-  removeBo(boWithFields: BoRecordWithFields): void {
-    this.coController.removeBoFromCo(this.bo.id, this.draftId, boWithFields.id).subscribe(() => {
-      const index = this.boRecordsWithFields.findIndex(bo => bo.id === boWithFields.id);
-      this.boRecordsWithFields.splice(index, 1);
-    });
-
+  removeCoField(coField: CoFieldRecord): Observable<void> {
+    return this.coController.removeCoField(this.bo.id, this.draftId, coField.coFieldId)
+      .pipe(tap(() => {
+        CoFieldRecordF.remove(coField, this.coFieldsSimple);
+        CoFieldRecordF.remove(coField, this.coFieldsComposite);
+        this.coChangeService.removeCoFieldSubject.next(coField.coFieldId);
+      }));
   }
 
-  removeCoField(coFieldId: string): void {
-    this.coController.removeCoField(this.bo.id, this.draftId, coFieldId).subscribe();
-  }
-
-  removeLink(coFieldId: string, boFieldLink: BoFieldLink | undefined): void {
-    this.coController.removeBoFieldLink(this.bo.id, this.draftId, coFieldId, boFieldLink).subscribe();
+  removeLink(coField: CoFieldRecord, boFieldLink: BoFieldLink | undefined): Observable<void> {
+    BoFieldLinkF.remove(boFieldLink.fieldId, coField.links);
+    return this.coController.removeBoFieldLink(this.bo.id, this.draftId, coField.coFieldId, boFieldLink);
   }
 }
