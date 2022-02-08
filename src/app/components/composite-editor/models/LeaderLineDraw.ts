@@ -4,7 +4,8 @@ import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFiel
 export class LeaderLineDraw {
 
   id: string;
-  removeSubject: Subject<string> = new Subject();
+  removeLink: Subject<string> = new Subject();
+  removeLine: Subject<string> = new Subject();
   changeColorSubject: Subject<{ color: string, fieldId: string }> = new Subject();
 
 
@@ -25,7 +26,7 @@ export class LeaderLineDraw {
     return lines.findIndex((line) => line.id === id);
   }
 
-  public static findByFieldId(id: string, lines: LeaderLineDraw[]): LeaderLineDraw {
+  public static findByLinkFieldId(id: string, lines: LeaderLineDraw[]): LeaderLineDraw {
     return lines.find((leaderLine) => leaderLine.field.linkLeaderLine && leaderLine.field.links.some((link) => link.fieldId === id));
   }
 

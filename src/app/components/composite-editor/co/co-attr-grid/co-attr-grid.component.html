@@ -2,7 +2,7 @@
   <div class="flex" first>
     {{coWidget.coWidgetType === CoWidgetType.COMPOSITE ? 'Составные атрибуты' : 'Простые атрибуты'}}</div>
   <div abs class="abs icon">
-    <mat-icon [class.expand]="coWidget.isExpand" [appToggleClass]="coWidget" svgIcon="no-color-arrow"></mat-icon>
+    <mat-icon [class.expand]="coWidget.isExpand" svgIcon="no-color-arrow"></mat-icon>
   </div>
 </app-co-second-grid>
 <app-expansion-panel [expanded]="coWidget.isExpand">
@@ -16,3 +16,4 @@
     </ng-template>
   </app-co-attr-item-drag>
 </app-expansion-panel>
+<ng-container *ngIf="load$| async"></ng-container>

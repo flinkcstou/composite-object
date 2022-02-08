@@ -1,7 +1,7 @@
 import { StyleField } from 'src/app/components/composite-editor/models/StyleField';
 import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
 import { CoWidgetType } from 'src/app/components/composite-editor/models/CoWidgetType';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 export class CoWidget implements StyleField {
   id: string;
@@ -11,6 +11,9 @@ export class CoWidget implements StyleField {
   isExpand: boolean;
   isReplacement: boolean;
   linkLeaderLine: boolean;
+
+  toggleSubject: Subject<string> = new Subject<string>();
+
 
   constructor(public coWidgetType: CoWidgetType, public  coFields$: Observable<CoFieldRecord[]>) {
     this.id = CoWidget.rndId();

@@ -1,13 +1,14 @@
 import { Directive, ElementRef, HostListener, Inject, Input, OnDestroy } from '@angular/core';
-import { CoFieldRecord, CoFieldRecordF } from 'src/app/components/composite-editor/models/CoFieldRecord';
+import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
 import { DOCUMENT } from '@angular/common';
 import { CoService } from 'src/app/components/services/co.service';
 import { LeaderLineDraw, LeaderLineDrawF } from 'src/app/components/composite-editor/models/LeaderLineDraw';
-import { fromEvent, merge, Observable } from 'rxjs';
+import { fromEvent, merge, Observable, of } from 'rxjs';
 import { CoChangeService } from 'src/app/components/services/co-change.service';
 import { SubSink } from 'src/app/components/composite-editor/models/exist/SubSink';
-import { debounceTime, delay, exhaustMap, switchMap } from 'rxjs/operators';
+import { debounceTime, exhaustMap, filter, switchMap, tap } from 'rxjs/operators';
 import { BoFieldLinkF } from 'src/app/components/composite-editor/models/BoFieldLink';
+import { safeObserve } from 'src/app/app.component';
 
 declare let LeaderLine: any;
 
@@ -35,6 +36,8 @@ export class LeaderLineDirective implements OnDestroy {
     this.changeColor();
     this.remove();
     this.scrolling();
+    this.refreshLine();
+    this.removeLineByBoId();
 
   }
 
@@ -69,7 +72,7 @@ export class LeaderLineDirective implements OnDestroy {
   }
 
   remove(): void {
-    this.subSink.sink = this.leaderLineDraw.removeSubject.asObservable()
+    this.subSink.sink = this.leaderLineDraw.removeLink.asObservable()
       .pipe(
         exhaustMap((fieldId: string) => {
           if (this._field.links.length === 1) {
@@ -83,8 +86,8 @@ export class LeaderLineDirective implements OnDestroy {
 
   removeLink(fieldId: string): Observable<void> {
     this.removeLine(fieldId);
-    this.coChangeService.leaderLineSubject.next(this.leaderLineDraw.id);
     const boFieldLink = BoFieldLinkF.find(fieldId, this._field.links);
+    this.coChangeService.toggleLeaderLineSubject.next(this.leaderLineDraw.id);
     return this.coService.removeLink(this._field, boFieldLink);
   }
 
@@ -93,6 +96,32 @@ export class LeaderLineDirective implements OnDestroy {
     LeaderLineDraw.removeById(this.leaderLineDraw?.id, this.coService.leaderLines);
     this.leaderLineDraw = null;
     return this.coService.removeCoField(this._field);
+  }
+
+
+  refreshLine(): void {
+    this.subSink.sink = safeObserve(
+      this.coChangeService.toggleBoSubject.asObservable()).pipe(
+      filter(() => this._field.linkLeaderLine),
+      tap(() => this.lines.forEach((line) => line.leaderLine?.hide?.())),
+      debounceTime(300),
+      tap(() => this.lines.forEach((line) => this.showLines())),
+    ).subscribe();
+  }
+
+  removeLineByBoId(): void {
+    this.subSink.sink =
+      this.coChangeService.removeBoSubject.asObservable().pipe(
+        tap((boId) => {
+          if (this._field.linkLeaderLine && this._field.links.some((link) => link.boId === boId)) {
+            this.toggleLeaderLine();
+          }
+        }),
+        filter(() => this._field.linkLeaderLine),
+        tap(() => this.lines.forEach((line) => line.leaderLine?.hide?.())),
+        debounceTime(300),
+        tap(() => this.lines.forEach((line) => this.showLines())),
+      ).subscribe();
   }
 
   scrolling(): void {
@@ -109,12 +138,15 @@ export class LeaderLineDirective implements OnDestroy {
   @HostListener('click', ['$event'])
   toggleLeaderLine(): void {
     this._field.linkLeaderLine = !this._field.linkLeaderLine;
+    this.showLines();
+  }
+
+  showLines(): void {
+    this.removeLines();
     if (this._field.linkLeaderLine) {
       this.createLines();
-    } else {
-      this.removeLines();
     }
-    this.coChangeService.leaderLineSubject.next(this.leaderLineDraw.id);
+    this.coChangeService.toggleLeaderLineSubject.next(this.leaderLineDraw.id);
   }
 
   createLines(): void {

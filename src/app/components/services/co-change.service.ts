@@ -8,8 +8,9 @@ export class CoChangeService {
 
 
   public toggleBoSubject: Subject<string> = new Subject<string>();
+  public toggleWidgetSubject: Subject<string> = new Subject<string>();
   public removeBoSubject: Subject<string> = new Subject<string>();
-  public leaderLineSubject: Subject<string> = new Subject();
+  public toggleLeaderLineSubject: Subject<string> = new Subject();
   public removeCoFieldSubject: Subject<string> = new Subject<string>();
 
 

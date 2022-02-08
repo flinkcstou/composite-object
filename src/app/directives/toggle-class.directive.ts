@@ -1,7 +1,6 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from '@angular/core';
 import { BoRecordWithFields } from 'src/app/components/composite-editor/models/BoRecordWithFields';
 import { CoWidget } from 'src/app/components/composite-editor/models/CoWidget';
-import { CoChangeService } from 'src/app/components/services/co-change.service';
 
 @Directive({
   selector: '[appToggleClass]',
@@ -39,15 +38,8 @@ export class ToggleClassDirective {
     this._appToggleClass.isExpand = !this._appToggleClass.isExpand;
     this.setClass();
     this.toggleEmit.emit(this._appToggleClass.isExpand);
-    this.nextToggleBo();
+    this._appToggleClass.toggleSubject.next();
 
-  }
-
-  nextToggleBo(): void {
-    if ('id' in this._appToggleClass) {
-      const bo = this._appToggleClass as BoRecordWithFields;
-      bo.toggleSubject.next();
-    }
   }
 
 

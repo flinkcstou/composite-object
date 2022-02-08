@@ -31,9 +31,9 @@ export class LinkLeaderLineDirective implements OnDestroy {
   }
 
   listen(): void {
-    this.subSink.sink = this.coChangeService.leaderLineSubject.asObservable()
+    this.subSink.sink = this.coChangeService.toggleLeaderLineSubject.asObservable()
       .subscribe(() => {
-        this.leaderLineDraw = LeaderLineDraw.findByFieldId(this._field.fieldId, this.coService.leaderLines);
+        this.leaderLineDraw = LeaderLineDraw.findByLinkFieldId(this._field.fieldId, this.coService.leaderLines);
         this.isShowLeader = !!this.leaderLineDraw;
       });
   }
@@ -44,7 +44,7 @@ export class LinkLeaderLineDirective implements OnDestroy {
   remove($event: MouseEvent): any {
     $event.stopPropagation();
     $event.preventDefault();
-    this.leaderLineDraw?.removeSubject?.next(this._field?.fieldId);
+    this.leaderLineDraw?.removeLink?.next(this._field?.fieldId);
   }
 
   @HostListener('mouseenter', ['$event'])
