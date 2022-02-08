@@ -175,6 +175,10 @@ export class CoService {
 
   }
 
+  removeCoField(coFieldId: string): void {
+    this.coController.removeCoField(this.bo.id, this.draftId, coFieldId).subscribe();
+  }
+
   removeLink(coFieldId: string, boFieldLink: BoFieldLink | undefined): void {
     this.coController.removeBoFieldLink(this.bo.id, this.draftId, coFieldId, boFieldLink).subscribe();
   }

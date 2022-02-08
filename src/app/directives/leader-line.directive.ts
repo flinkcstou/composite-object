@@ -3,6 +3,7 @@ import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFiel
 import { DOCUMENT } from '@angular/common';
 import { CoService } from 'src/app/components/services/co.service';
 import { LeaderLineDrawF } from 'src/app/components/composite-editor/models/LeaderLineDraw';
+import { fromEvent } from 'rxjs';
 
 declare let LeaderLine: any;
 
@@ -20,6 +21,11 @@ export class LeaderLineDirective {
     const leaderLineDraw = LeaderLineDrawF.create(value);
     leaderLineDraw.removeSubject.subscribe((fieldId: string) => {
       this.toggleLeaderLine();
+      if (this._field.links.length === 1) {
+        this.coService.coFieldsSimple.splice(this.coService.coFieldsSimple.findIndex((field) => field.coFieldId === this._field.coFieldId), 1);
+        this.coService.removeCoField(this._field.coFieldId);
+        return;
+      }
       const index = this._field.links.findIndex((link) => link.fieldId === fieldId);
       this.coService.removeLink(this._field.coFieldId, this._field.links[index]);
       this._field.links.splice(index, 1);
@@ -38,6 +44,12 @@ export class LeaderLineDirective {
               @Inject(DOCUMENT) private document: Document,
               private coService: CoService,
   ) {
+    const elementById = document.getElementById('firstContainerID');
+    fromEvent(elementById, 'scroll').subscribe(() => {
+      this.lines.forEach((line) => {
+        line.position();
+      });
+    });
   }
 
   @HostListener('click', ['$event'])

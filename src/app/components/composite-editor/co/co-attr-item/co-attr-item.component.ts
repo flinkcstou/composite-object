@@ -1,6 +1,7 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
 import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
+import { CoService } from 'src/app/components/services/co.service';
 
 @Component({
   selector: 'app-co-attr-item',
@@ -17,13 +18,16 @@ export class CoAttrItemComponent implements OnInit {
     return this.field?.isChecked;
   }
 
-  constructor() {
+  constructor(private coService: CoService) {
   }
 
   ngOnInit(): void {
   }
 
-  remove() {
-
+  remove($event: MouseEvent): void {
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.coService.removeCoField(this.field.coFieldId);
+    this.coService.coFieldsSimple.splice(this.coService.coFieldsSimple.findIndex((field) => field.coFieldId === this.field.coFieldId), 1);
   }
 }
