@@ -24,6 +24,9 @@ export class LeaderLineDirective implements OnDestroy {
 
   private _field: CoFieldRecord = {} as CoFieldRecord;
 
+
+  @Input() private coWidgetId;
+
   @Input() set appLeaderLine(value: CoFieldRecord) {
 
     this.destroyAll();
@@ -38,6 +41,7 @@ export class LeaderLineDirective implements OnDestroy {
     this.scrolling();
     this.refreshLine();
     this.removeLineByBoId();
+    this.refreshWidgetLine();
 
   }
 
@@ -102,6 +106,21 @@ export class LeaderLineDirective implements OnDestroy {
   refreshLine(): void {
     this.subSink.sink = safeObserve(
       this.coChangeService.toggleBoSubject.asObservable()).pipe(
+      filter(() => this._field.linkLeaderLine),
+      tap(() => this.lines.forEach((line) => line.leaderLine?.hide?.())),
+      debounceTime(300),
+      tap(() => this.lines.forEach((line) => this.showLines())),
+    ).subscribe();
+  }
+
+  refreshWidgetLine(): void {
+    this.subSink.sink = safeObserve(
+      this.coChangeService.toggleWidgetSubject.asObservable()).pipe(
+      tap((coWidgetId) => {
+        if (this._field.linkLeaderLine && this.coWidgetId === coWidgetId) {
+          this.toggleLeaderLine();
+        }
+      }),
       filter(() => this._field.linkLeaderLine),
       tap(() => this.lines.forEach((line) => line.leaderLine?.hide?.())),
       debounceTime(300),

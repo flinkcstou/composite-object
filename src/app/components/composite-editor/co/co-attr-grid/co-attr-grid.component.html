@@ -12,7 +12,7 @@
   </app-co-second-grid>
   <app-co-attr-item-drag [coWidget]="coWidget" [items]="coWidget.coFields$| async">
     <ng-template let-item #item>
-      <app-co-attr-item [appLeaderLine]="item" appHoverClass [field]="item"></app-co-attr-item>
+      <app-co-attr-item [appLeaderLine]="item" [coWidgetId]="coWidget.id" appHoverClass [field]="item"></app-co-attr-item>
     </ng-template>
   </app-co-attr-item-drag>
 </app-expansion-panel>
