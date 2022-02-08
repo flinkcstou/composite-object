@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable, ObservedValuesFromArray, of, Subject } from 'rxjs';
-import { concatMap, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, merge, Observable, of, Subject } from 'rxjs';
+import { filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { CoController } from 'src/app/components/controllers/co.controller';
 import { BoController } from 'src/app/components/controllers/bo.controller';
 import { EditingService } from 'src/app/components/services/editing.service';
@@ -12,7 +12,7 @@ import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/comp
 import { CoFieldRecord, CoFieldRecordF } from 'src/app/components/composite-editor/models/CoFieldRecord';
 import { BoFieldLink, BoFieldLinkF } from 'src/app/components/composite-editor/models/BoFieldLink';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { CoWidgetF } from 'src/app/components/composite-editor/models/CoWidget';
+import { CoWidget, CoWidgetF } from 'src/app/components/composite-editor/models/CoWidget';
 import { CoWidgetType } from 'src/app/components/composite-editor/models/CoWidgetType';
 import { BoFieldForCoWIthBoId, BoFieldForCoWIthBoIdF } from 'src/app/components/composite-editor/models/BoFieldForCoWIthBoId';
 import { LeaderLineDraw } from 'src/app/components/composite-editor/models/LeaderLineDraw';
@@ -23,16 +23,38 @@ import { CoChangeService } from 'src/app/components/services/co-change.service';
 })
 export class CoService {
 
-  boRecordsWithFields: BoRecordWithFields[] = [];
+  private boRecordsWithFieldsBehavior: BehaviorSubject<BoRecordWithFields[]> = new BehaviorSubject([]);
+  public boRecordsWithFields$: Observable<BoRecordWithFields[]> = this.boRecordsWithFieldsBehavior.asObservable();
+
+  private coFieldsSimpleBehavior: BehaviorSubject<CoFieldRecord[]> = new BehaviorSubject<CoFieldRecord[]>([]);
+  public coFieldsSimple$: Observable<CoFieldRecord[]> = this.coFieldsSimpleBehavior.asObservable();
 
 
-  coFieldsSimple: CoFieldRecord[] = [];
-  coFieldsComposite: CoFieldRecord[] = [];
+  private coFieldsCompositeBehavior: BehaviorSubject<CoFieldRecord[]> = new BehaviorSubject<CoFieldRecord[]>([]);
+  public coFieldsComposite$: Observable<CoFieldRecord[]> = this.coFieldsCompositeBehavior.asObservable();
 
-  coWidgets: any[] = [
-    CoWidgetF.create(CoWidgetType.COMPOSITE, this.coFieldsComposite),
-    CoWidgetF.create(CoWidgetType.SIMPLE, this.coFieldsSimple)
-  ];
+
+  private coWidgetsBehavior: BehaviorSubject<CoWidget[]> = new BehaviorSubject([
+    CoWidgetF.create(CoWidgetType.COMPOSITE, this.coFieldsComposite$),
+    CoWidgetF.create(CoWidgetType.SIMPLE, this.coFieldsSimple$)
+  ]);
+  public coWidgets$: Observable<CoWidget[]> = this.coWidgetsBehavior.asObservable();
+
+  get boRecordsWithFields(): BoRecordWithFields[] {
+    return this.boRecordsWithFieldsBehavior.value;
+  }
+
+  get coFieldsSimple(): CoFieldRecord[] {
+    return this.coFieldsSimpleBehavior.value;
+  }
+
+  get coFieldsComposite(): CoFieldRecord[] {
+    return this.coFieldsCompositeBehavior.value;
+  }
+
+  get coWidgets(): CoWidget[] {
+    return this.coWidgetsBehavior.value;
+  }
 
   leaderLines: LeaderLineDraw[] = [];
 
@@ -59,10 +81,10 @@ export class CoService {
               private coChangeService: CoChangeService) {
 
     this.changedSubject.pipe(
-      mergeMap(() => this.loadBoRecordsForCo())
-    ).subscribe(() => {
-      this.changedLoadedSubject.next();
-    });
+      mergeMap(() => forkJoin([this.loadBoRecordsForCo(), this.loadCoFields()])))
+      .subscribe(() => {
+        this.changedLoadedSubject.next();
+      });
   }
 
   generateFirstDraft(): Observable<string> {
@@ -101,8 +123,16 @@ export class CoService {
     return this.coController.loadBoRecordsForCo(this.bo.id, this.draftId)
       .pipe(
         map((boRecords) => boRecords.map((bo) => BoRecordWithFieldsF.toBo(bo))),
-        tap((boRecords) => this.boRecordsWithFields = (boRecords as BoRecordWithFields[]) || [])
+        tap((boRecords) => this.boRecordsWithFieldsBehavior.next((boRecords as BoRecordWithFields[]) || []))
       );
+  }
+
+  loadCoFields(): Observable<any> {
+    return forkJoin([this.coController.loadCoFieldsComposite(this.bo.id, this.draftId), this.coController.loadCoFieldsSimple(this.bo.id, this.draftId)])
+      .pipe(tap((fields) => {
+        this.coFieldsCompositeBehavior.next(fields[0]);
+        this.coFieldsSimpleBehavior.next(fields[1]);
+      }));
   }
 
   loadBoFieldsForCo(boRecordWithFields: BoRecordWithFields): Observable<BoFieldForCo[]> {
@@ -115,10 +145,9 @@ export class CoService {
   }
 
 
-  dropToCoGroup(event: CdkDragDrop<BoFieldForCo[]>) {
-
+  dropToCoGroup(event: CdkDragDrop<BoFieldForCo[]>): void {
     const coFields = [...this.coFieldsComposite, ...this.coFieldsSimple];
-    const fields: BoFieldForCoWIthBoId[] = [].concat.apply([], this.boRecordsWithFields.map((bo) => bo.fields.map(field => BoFieldForCoWIthBoIdF.create(bo.id, field))) as any[]);
+    const fields: BoFieldForCoWIthBoId[] = [].concat.apply([], this.boRecordsWithFields.map((bo) => bo?.fields?.map?.(field => BoFieldForCoWIthBoIdF.create(bo.id, field))).filter(Boolean) as any[]);
     const checkedUniqueFields = fields.filter((field) => field.isChecked && !coFields.some((coField) => coField.links.some((link) => link.fieldId === field.fieldId)));
     if (!checkedUniqueFields.length) {
       return;

@@ -19,7 +19,6 @@
     Тип
   </div>
 </app-bo-second-grid>
-<ng-container *ngFor="let boRecordWithFields of boRecordsWithFields; trackBy getId">
+<ng-container *ngFor="let boRecordWithFields of boRecordsWithFields$ | async ; trackBy getId">
   <app-bo-attr-grid appHoverClass [boWithFields]="boRecordWithFields"></app-bo-attr-grid>
 </ng-container>
-<ng-container *ngIf="load$| async"></ng-container>
