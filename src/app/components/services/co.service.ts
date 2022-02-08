@@ -100,6 +100,7 @@ export class CoService {
   loadBoRecordsForCo(): Observable<BoRecord[]> {
     return this.coController.loadBoRecordsForCo(this.bo.id, this.draftId)
       .pipe(
+        map((boRecords) => boRecords.map((bo) => BoRecordWithFieldsF.toBo(bo))),
         tap((boRecords) => this.boRecordsWithFields = (boRecords as BoRecordWithFields[]) || [])
       );
   }

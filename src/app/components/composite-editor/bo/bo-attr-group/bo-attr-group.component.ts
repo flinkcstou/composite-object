@@ -26,7 +26,12 @@ export class BoAttrGroupComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  getId = (index: number, field: BoRecordWithFields) => field.id;
+
   chooseRecord(): void {
+    if (!this.editingService.boRecords.length) {
+      return;
+    }
     if (this.boRecordsWithFields.length === this.editingService.boRecords.length) {
       return;
     }
