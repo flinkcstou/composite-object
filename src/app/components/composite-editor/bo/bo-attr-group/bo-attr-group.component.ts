@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CoService } from 'src/app/components/services/co.service';
 import { BoRecordWithFields } from 'src/app/components/composite-editor/models/BoRecordWithFields';
 import { EditingService } from 'src/app/components/services/editing.service';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-bo-attr-group',
@@ -12,11 +14,13 @@ export class BoAttrGroupComponent implements OnInit {
 
   boRecordsWithFields: BoRecordWithFields[] = [];
 
+  load$: Observable<any>;
 
   constructor(private coService: CoService,
               private editingService: EditingService
   ) {
-    this.boRecordsWithFields = this.coService.boRecordsWithFields;
+    this.load$ = this.coService.changedLoadedSubject.asObservable()
+      .pipe(tap(() => this.boRecordsWithFields = this.coService.boRecordsWithFields));
   }
 
   ngOnInit(): void {

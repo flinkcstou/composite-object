@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable, ObservedValuesFromArray, of, Subject } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, ObservedValuesFromArray, of, Subject } from 'rxjs';
 import { concatMap, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { CoController } from 'src/app/components/controllers/co.controller';
 import { BoController } from 'src/app/components/controllers/bo.controller';
@@ -37,6 +37,7 @@ export class CoService {
   leaderLines: LeaderLineDraw[] = [];
 
   public changedSubject: Subject<void> = new Subject<void>();
+  public changedLoadedSubject: BehaviorSubject<void> = new BehaviorSubject<void>(null);
 
 
   private _draftId = '';
@@ -57,10 +58,11 @@ export class CoService {
               private editingService: EditingService,
               private coChangeService: CoChangeService) {
 
-    // this.changedSubject.pipe(
-    //   mergeMap(() => this.loadBoRecordsForCo())
-    // ).subscribe(() => {
-    // });
+    this.changedSubject.pipe(
+      mergeMap(() => this.loadBoRecordsForCo())
+    ).subscribe(() => {
+      this.changedLoadedSubject.next();
+    });
   }
 
   generateFirstDraft(): Observable<string> {
@@ -98,7 +100,7 @@ export class CoService {
   loadBoRecordsForCo(): Observable<BoRecord[]> {
     return this.coController.loadBoRecordsForCo(this.bo.id, this.draftId)
       .pipe(
-        tap((boRecords) => this.boRecordsWithFields = (boRecords as BoRecordWithFields[]))
+        tap((boRecords) => this.boRecordsWithFields = (boRecords as BoRecordWithFields[]) || [])
       );
   }
 
@@ -150,7 +152,7 @@ export class CoService {
 
     this.coFieldsComposite.push(currentField);
     currentField.links = links;
-    
+
     CoFieldRecordF.remove(prevField, this.coFieldsSimple);
     CoFieldRecordF.remove(currentField, this.coFieldsSimple);
     this.coChangeService.removeCoFieldSubject.next(prevField.coFieldId);
