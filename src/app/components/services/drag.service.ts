@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
 import { CoService } from 'src/app/components/services/co.service';
 import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
+import { StyleFieldF } from 'src/app/components/composite-editor/models/StyleField';
+import { CoChangeService } from 'src/app/components/services/co-change.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,8 @@ export class DragService {
   private boDraggableBehaviorSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public boDraggable$$: Observable<boolean> = this.boDraggableBehaviorSubject.asObservable();
 
-  constructor(private coService: CoService) {
+  constructor(private coService: CoService,
+              private coChangeService: CoChangeService) {
   }
 
   set isBoDraggable(value: boolean) {
@@ -32,6 +35,17 @@ export class DragService {
   isExpand(): boolean {
     return this.coService.coWidgets.some((c: any) => !c?.isExpand);
   }
+
+
+  unCheckBoField(): void {
+    this.coService.boRecordsWithFields.forEach((bo) => StyleFieldF.clearCheck(bo));
+    this.coChangeService.calcCountCheck(true, true);
+  }
+
+  countCheckBoField(): number {
+    return this.coChangeService.countCheckBehavior.value;
+  }
+
 
   toIdsBoDrag(): string[] {
     const simpleIds = this.coService.coFieldsSimple.map((i: CoFieldRecord) => i.coFieldId);
@@ -47,21 +61,6 @@ export class DragService {
 
   toIdsEmpty(): string[] {
     return [];
-  }
-
-
-  dropDefault(event: CdkDragDrop<any>): void {
-    return;
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
-    }
   }
 
   dropCoComposite(event: CdkDragDrop<CoFieldRecord[]>): void {

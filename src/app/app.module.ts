@@ -33,6 +33,10 @@ import { AttrDragPreviewComponent } from './components/composite-editor/grid-ui/
 import { LeaderLineDirective } from './directives/leader-line.directive';
 import { LinkLeaderLineDirective } from './directives/link-leader-line.directive';
 import { ClickStopPropagationDirective } from 'src/app/directives/click-stop-propagation.directive';
+import { FormsModule } from '@angular/forms';
+import { AlreadyExistsDirective } from 'src/app/directives/already-exists.directive';
+import { AutoSaverDirective } from 'src/app/directives/auto-saver.directive';
+import { FocusOnInitDirective } from 'src/app/directives/focus-on-init.directive';
 
 @NgModule({
   declarations: [
@@ -60,7 +64,10 @@ import { ClickStopPropagationDirective } from 'src/app/directives/click-stop-pro
     AttrDragPreviewComponent,
     LeaderLineDirective,
     LinkLeaderLineDirective,
-    ClickStopPropagationDirective
+    ClickStopPropagationDirective,
+    AlreadyExistsDirective,
+    AutoSaverDirective,
+    FocusOnInitDirective
 
   ],
   imports: [
@@ -71,6 +78,7 @@ import { ClickStopPropagationDirective } from 'src/app/directives/click-stop-pro
     MatIconModule,
     HttpClientModule,
     HttpServiceModule.forRoot(environment.urlPrefix, environment.apiPrefix),
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

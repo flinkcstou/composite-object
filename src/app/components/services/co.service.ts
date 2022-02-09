@@ -5,7 +5,7 @@ import { CoController } from 'src/app/components/controllers/co.controller';
 import { BoController } from 'src/app/components/controllers/bo.controller';
 import { EditingService } from 'src/app/components/services/editing.service';
 import { safeObserve } from 'src/app/app.component';
-import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
+import { BoFieldForCo, BoFieldForCoF } from 'src/app/components/composite-editor/models/BoFieldForCo';
 import { CompositeObject } from 'src/app/components/composite-editor/models/CompositeObject';
 import { BoRecord } from 'src/app/components/composite-editor/models/BoRecord';
 import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/composite-editor/models/BoRecordWithFields';
@@ -26,7 +26,15 @@ export class CoService {
   private boRecordsWithFieldsBehavior: BehaviorSubject<BoRecordWithFields[]> = new BehaviorSubject([]);
   public boRecordsWithFields$: Observable<BoRecordWithFields[]> = this.boRecordsWithFieldsBehavior.asObservable();
 
-  private coFieldsSimpleBehavior: BehaviorSubject<CoFieldRecord[]> = new BehaviorSubject<CoFieldRecord[]>([]);
+  private coFieldsSimpleBehavior: BehaviorSubject<CoFieldRecord[]> = new BehaviorSubject<CoFieldRecord[]>([
+    {
+      // todo nabu test
+      label: 'sdfsdf',
+      coFieldId: 'asdfsdfsd',
+      links: [{boId: 'dsfsdf', fieldId: 'sdff'},
+      ]
+    } as CoFieldRecord
+  ]);
   public coFieldsSimple$: Observable<CoFieldRecord[]> = this.coFieldsSimpleBehavior.asObservable();
 
 
@@ -111,11 +119,12 @@ export class CoService {
       ));
   }
 
-  addBoToCo(boId: string): Observable<BoRecord> {
-    return this.coController.addBoToCo(this.bo.id, this.draftId, boId)
+  addBoToCo(boRecord: BoRecord): Observable<BoRecord> {
+    this.boRecordsWithFields.push(BoRecordWithFieldsF.toBo(boRecord));
+    return this.coController.addBoToCo(this.bo.id, this.draftId, boRecord.id)
       .pipe(
-        tap((bo) =>
-          this.boRecordsWithFields.push(BoRecordWithFieldsF.toBo(bo)))
+        // todo nabu test
+        // tap((bo) => this.boRecordsWithFields.push(BoRecordWithFieldsF.toBo(bo)))
       );
   }
 
@@ -158,18 +167,27 @@ export class CoService {
     });
   }
 
-  dropToCoComposite(event: CdkDragDrop<CoFieldRecord[]> | CdkDragDrop<BoFieldForCo[]>): void {
+  dropToCoComposite(event: CdkDragDrop<CoFieldRecord[], CoFieldRecord[]> | CdkDragDrop<CoFieldRecord[], BoFieldForCo[]>): void {
     if (event.previousContainer.data.length === 1 && 'coFieldId' in event.previousContainer.data[0]) {
-      this.dropToCoCompositeByCoField(event as CdkDragDrop<CoFieldRecord[]>);
+      this.dropToCoCompositeByCoField(event as CdkDragDrop<CoFieldRecord[], CoFieldRecord[]>);
+      return;
     }
-    this.dropToCoCompositeByBoField(event as CdkDragDrop<BoFieldForCo[]>);
+    this.dropToCoCompositeByBoField(event as CdkDragDrop<CoFieldRecord[], BoFieldForCo[]>);
   }
 
-  dropToCoCompositeByBoField(event: CdkDragDrop<BoFieldForCo[]>): void {
+  dropToCoCompositeByBoField(event: CdkDragDrop<CoFieldRecord[], BoFieldForCo[]>): void {
+    const coField = event.container.data[0] as CoFieldRecord;
+    const boFields = BoFieldForCoF.flat(this.boRecordsWithFields).filter((boField) => boField.isChecked);
+
+    if (!boFields.every((boField) => boField.type === coField.type)) {
+      // todo nabu
+      return;
+    }
+
 
   }
 
-  dropToCoCompositeByCoField(event: CdkDragDrop<CoFieldRecord[]>): void {
+  dropToCoCompositeByCoField(event: CdkDragDrop<CoFieldRecord[], CoFieldRecord[]>): void {
     const prevField = event.previousContainer.data[0];
     const currentField = event.container.data[0];
     if (prevField.type !== currentField.type) {

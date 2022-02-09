@@ -31,6 +31,10 @@
       line-height: 18px;
 
       color: #232323;
+
+      input.invalid {
+        border-color: #FF8F51;
+      }
     }
   }
 

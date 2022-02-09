@@ -1,7 +1,20 @@
 <div class="left">
   <div class="object ">
     <div class="title">
-      {{field.label}}
+      <input
+        clickStopPropagation
+        type="text"
+        required
+        #label="ngModel"
+        [title]="field.label"
+        [name]="field.coFieldId"
+        [ngModel]="field.label"
+        [appAutoSaver]="saveLabel"
+        [appAlreadyExists]="comparator"
+        (keypress)="keyboardHandler($event)"
+        (paste)="onPasteLabel($event)"
+        (click)="stop($event)"
+      />
     </div>
   </div>
 </div>

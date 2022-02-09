@@ -20,7 +20,7 @@ export class CoWidget implements StyleField {
     this.isExpand = true;
   }
 
-  private static rndId(): string {
+  public static rndId(): string {
     return Math.floor(Math.random() * 10000) + '';
   }
 }

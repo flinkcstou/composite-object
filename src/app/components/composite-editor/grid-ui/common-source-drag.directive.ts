@@ -24,6 +24,8 @@ export class CommonSourceDragDirective<T extends StyleField> {
 
   public isDraggable = false;
 
+  public preview: { isScope: boolean, label: string } = {} as any;
+
   constructor(protected dragService: DragService, public id: string) {
     this.updateIsBoDraggable();
     this.updatePosition();
@@ -87,7 +89,7 @@ export class CommonSourceDragDirective<T extends StyleField> {
     replacementC.innerHTML = bodyC.innerHTML;
   }
 
-  cdkDragEntered($event: CdkDragEnter<T>, item: T): void {
+  cdkDragEntered($event: CdkDragEnter<T[]>, item: T): void {
     item.isReplacement = !$event.container.id.includes(this.id);
   }
 

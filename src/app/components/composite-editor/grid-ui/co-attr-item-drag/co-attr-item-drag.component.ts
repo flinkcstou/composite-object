@@ -28,13 +28,22 @@ export class CoAttrItemDragComponent extends CommonSourceDragDirective<CoFieldRe
     this.dragService.dropCoComposite(event);
   }
 
-  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement, item: CoFieldRecord, cdkDropList: CdkDropList): void {
+
+  mousedown($event: MouseEvent, item: CoFieldRecord, cdkDropList: CdkDropList): void {
     this.toIds = this.dragService.toIdsCoSimple(item);
     cdkDropList.connectedTo = this.toIds;
-    this.cdkDragStarted($event, bodyC, replacementC);
   }
 
-  entered($event: CdkDragEnter<any>, item: CoFieldRecord): void {
+  mouseup($event: MouseEvent): void {
+    this.toIds = this.dragService.toIdsEmpty();
+  }
+
+  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement): void {
+    this.cdkDragStarted($event, bodyC, replacementC);
+    this.dragService.unCheckBoField();
+  }
+
+  entered($event: CdkDragEnter<CoFieldRecord[]>, item: CoFieldRecord): void {
     this.cdkDragEntered($event, item);
   }
 

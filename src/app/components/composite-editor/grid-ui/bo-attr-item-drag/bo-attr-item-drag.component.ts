@@ -18,18 +18,31 @@ export class BoAttrItemDragComponent extends CommonSourceDragDirective<BoFieldFo
   ngOnInit(): void {
   }
 
-  drop(event: CdkDragDrop<any>): void {
-    this.dragService.dropDefault(event);
-  }
-
-  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement, cdkDropList: CdkDropList): void {
+  mousedown($event: MouseEvent, cdkDropList: CdkDropList): void {
     this.toIds = this.dragService.toIdsBoDrag();
     cdkDropList.connectedTo = this.toIds;
-    this.cdkDragStarted($event, bodyC, replacementC);
-    this.setPosition($event);
+
   }
 
-  entered($event: CdkDragEnter<any>, item: BoFieldForCo): void {
+  mouseup($event: MouseEvent): void {
+    this.toIds = this.dragService.toIdsEmpty();
+  }
+
+  createPreview(item: BoFieldForCo): void {
+    const isScope = !!(this.dragService.countCheckBoField() - 1);
+    this.preview = {
+      isScope,
+      label: isScope ? `${item.label}(+${this.dragService.countCheckBoField()})` : item.label
+    };
+  }
+
+  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement, item: BoFieldForCo): void {
+    this.cdkDragStarted($event, bodyC, replacementC);
+    this.setPosition($event);
+    this.createPreview(item);
+  }
+
+  entered($event: CdkDragEnter<BoFieldForCo[]>, item: BoFieldForCo): void {
     this.cdkDragEntered($event, item);
   }
 
@@ -38,4 +51,9 @@ export class BoAttrItemDragComponent extends CommonSourceDragDirective<BoFieldFo
     this.toIds = this.dragService.toIdsEmpty();
   }
 
+  dropped($event: CdkDragDrop<BoFieldForCo[]>): void {
+    if ($event.container.id !== this.dragService.boAttrItemsDrag) {
+      this.dragService.unCheckBoField();
+    }
+  }
 }

@@ -2,6 +2,7 @@ import { BoRecord } from 'src/app/components/composite-editor/models/BoRecord';
 import { StyleField } from 'src/app/components/composite-editor/models/StyleField';
 import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
 import { Subject } from 'rxjs';
+import { CoWidget } from 'src/app/components/composite-editor/models/CoWidget';
 
 export class BoRecordWithFields implements BoRecord, StyleField {
   fields: BoFieldForCo[];
@@ -26,7 +27,21 @@ export class BoRecordWithFields implements BoRecord, StyleField {
 
 export const BoRecordWithFieldsF = {
   toBo(boRecord: BoRecord): BoRecordWithFields {
-    return new BoRecordWithFields(boRecord) as BoRecordWithFields;
+
+    const fields = [];
+    for (const a of 'sdfdsfsd') {
+
+      const boFieldForCo: BoFieldForCo = {
+        fieldId: CoWidget.rndId(),
+        label: CoWidget.rndId(),
+        type: 'ASD'
+      } as BoFieldForCo;
+      fields.push(boFieldForCo);
+    }
+
+    const boRecordWithFields = new BoRecordWithFields(boRecord);
+    boRecordWithFields.fields = fields;
+    return boRecordWithFields as BoRecordWithFields;
   },
   toFields(boRecordWithFields: BoRecordWithFields, boFieldsForCo: BoFieldForCo[]): BoRecordWithFields {
     boRecordWithFields.fields = boFieldsForCo;

@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  urlPrefix: 'http' + '://' + '192.168.11.23:1313' + '/web/',
+  urlPrefix: 'http' + '://' + '192.168.35.29:30610' + '/web/',
   apiPrefix: 'http' + '://' + '192.168.35.29:30610' + ':1313/api/',
 };
+//192.168.11.23:1313
 
 /*
  * For easier debugging in development mode, you can import the following file

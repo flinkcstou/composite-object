@@ -15,7 +15,7 @@ export class CoController {
 
   constructor(private http: HttpService) {
     this.http = http.setControllerPrefix('co');
-    this.setToken('$koI~8c8jl6po22to-vhaBvA3cehxVDcVl4');
+    this.setToken('t8UwJZfMtu9DcTA98-6guQOY8rLjwVs8GeZ');
   }
 
   setToken(token: string): void {

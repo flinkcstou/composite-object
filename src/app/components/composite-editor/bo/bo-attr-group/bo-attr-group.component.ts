@@ -34,6 +34,6 @@ export class BoAttrGroupComponent implements OnInit {
     }
     const boRecords = this.editingService.boRecords.slice(0, this.coService.boRecordsWithFields.length + 1);
     const boRecord = boRecords[boRecords.length - 1];
-    this.coService.addBoToCo(boRecord.id).subscribe();
+    this.coService.addBoToCo(boRecord).subscribe();
   }
 }

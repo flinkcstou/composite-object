@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class AttrDragPreviewComponent implements OnInit {
 
-  @Input() isScope = false;
+  @Input() preview: {isScope: boolean, label: string } = {} as any;
 
   constructor() {
   }

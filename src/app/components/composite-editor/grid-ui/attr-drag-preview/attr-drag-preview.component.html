@@ -1,9 +1,9 @@
-<div [class.scope]="isScope"
+<div [class.scope]="preview.isScope"
      class="bo-item-drag-preview">
-  <div [class.scope-child]="isScope"
+  <div [class.scope-child]="preview.isScope"
        class="bo-item-drag-preview-child">
     <div class="title">
-      data(+1)
+      {{preview.label}}
     </div>
     <div class="icon">
       <mat-icon svgIcon="no-color-drag"></mat-icon>

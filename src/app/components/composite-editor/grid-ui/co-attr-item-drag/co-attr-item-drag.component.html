@@ -16,7 +16,9 @@
   [cdkDropListSortPredicate]="sortPredicate"
 >
   <div class="co-item-drag"
-       (cdkDragStarted)="started($event, bodyC, replacementC, item, cdkDropList)"
+       (mousedown)="mousedown($event,item, cdkDropList)"
+       (mouseup)="mouseup($event)"
+       (cdkDragStarted)="started($event, bodyC, replacementC)"
        (cdkDragEntered)="entered($event, item)"
        (cdkDragEnded)="ended($event, replacementC, item)"
        cdkDrag>

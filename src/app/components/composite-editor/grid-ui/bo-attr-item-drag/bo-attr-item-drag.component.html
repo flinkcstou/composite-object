@@ -15,11 +15,14 @@
       [class.check]="item?.isChecked"
       [class.not-checked]="!item?.isChecked"
       cdkDrag
-      (cdkDragStarted)="started($event, bodyC, replacementC ,cdkDropList)"
+      (mousedown)="mousedown($event, cdkDropList)"
+      (mouseup)="mouseup($event)"
+      (cdkDragStarted)="started($event, bodyC,  replacementC, item)"
       (cdkDragEntered)="entered($event, item)"
       (cdkDragEnded)="ended($event, replacementC, item)"
+      (cdkDragDropped)="dropped($event)"
     >
-      <app-attr-drag-preview [isScope]="true" *cdkDragPreview></app-attr-drag-preview>
+      <app-attr-drag-preview [preview]="preview" *cdkDragPreview></app-attr-drag-preview>
       <div #bodyC>
         <ng-container
           *ngIf="itemTemplateRef"
