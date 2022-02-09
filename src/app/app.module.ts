@@ -7,6 +7,7 @@ import { EditingComponent } from './components/editing/editing.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClientModule } from '@angular/common/http';
 import { ToggleClassDirective } from './directives/toggle-class.directive';
 import { ExpansionPanelComponent } from './components/expansion-panel/expansion-panel.component';
@@ -76,6 +77,7 @@ import { FocusOnInitDirective } from 'src/app/directives/focus-on-init.directive
     BrowserAnimationsModule,
     DragDropModule,
     MatIconModule,
+    MatCheckboxModule,
     HttpClientModule,
     HttpServiceModule.forRoot(environment.urlPrefix, environment.apiPrefix),
     FormsModule,

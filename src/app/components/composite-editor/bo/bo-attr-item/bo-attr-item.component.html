@@ -1,6 +1,6 @@
 <div class="left">
   <div class="icon">
-    <mat-icon svgIcon="no-color-checkbox"></mat-icon>
+    <mat-checkbox disabled="true" [checked]="field.isChecked"></mat-checkbox>
   </div>
   <div class="title">
     {{field?.label}}
@@ -17,7 +17,7 @@
 </div>
 
 <div class="abs" [appLinkLeaderLine]="field">
-  <mat-icon  svgIcon="no-color-remove"></mat-icon>
+  <mat-icon svgIcon="no-color-delete"></mat-icon>
 </div>
 
 
