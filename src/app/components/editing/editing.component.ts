@@ -17,7 +17,7 @@ export class EditingComponent implements OnInit {
   ngOnInit(): void {
 
     this.route.params.pipe(
-      switchMap((id) => this.editingService.loadBoRecords('kRSzAr5xnv1l66@G')),
+      switchMap((id) => this.editingService.loadBoRecords('EqAm2hoCWHtTaDJg')),
       switchMap(id => this.editingService.loadBusinessObject(id)),
     ).subscribe();
   }

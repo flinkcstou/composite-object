@@ -17,6 +17,7 @@ export class CoWidget implements StyleField {
 
   constructor(public coWidgetType: CoWidgetType, public  coFields$: Observable<CoFieldRecord[]>) {
     this.id = CoWidget.rndId();
+    this.isExpand = true;
   }
 
   private static rndId(): string {

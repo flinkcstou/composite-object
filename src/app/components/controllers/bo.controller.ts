@@ -13,7 +13,7 @@ export class BoController {
 
   constructor(private http: HttpService) {
     this.http = http.setControllerPrefix('business-objects');
-    this.setToken('$koI~8c8jl6po22to-vhaBvA3cehxVDcVl4');
+    this.setToken('Zz72DYvPanTy3HS5c-aqfwXL6hsBekR9loE');
   }
 
   setToken(token: string): void {

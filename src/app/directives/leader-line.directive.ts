@@ -188,7 +188,7 @@ export class LeaderLineDirective implements OnDestroy {
           this.document.getElementById(this._field.coFieldId),
           this.document.getElementById(link.boId),
           {
-            color: '#2F80ED',
+            color: '#FF8F51',
             size: 3,
             hide: true
           }
