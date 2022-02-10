@@ -4,6 +4,8 @@ import { CoService } from 'src/app/components/services/co.service';
 import { CoChangeService } from 'src/app/components/services/co-change.service';
 import { SubSink } from 'src/app/components/composite-editor/models/exist/SubSink';
 import { LeaderLineDraw } from 'src/app/components/composite-editor/models/LeaderLineDraw';
+import { filter } from 'rxjs/operators';
+import { merge } from 'rxjs';
 
 @Directive({
   selector: '[appLinkLeaderLine]',
@@ -31,11 +33,14 @@ export class LinkLeaderLineDirective implements OnDestroy {
   }
 
   listen(): void {
-    this.subSink.sink = this.coChangeService.toggleLeaderLineSubject.asObservable()
-      .subscribe(() => {
-        this.leaderLineDraw = LeaderLineDraw.findByLinkFieldId(this._field.fieldId, this.coService.leaderLines);
-        this.isShowLeader = !!this.leaderLineDraw;
-      });
+    this.subSink.sink =
+      merge(
+        this.coChangeService.toggleLeaderLineSubject.asObservable(),
+        this.coChangeService.changedBehavior.asObservable().pipe(filter((bool) => !bool)))
+        .subscribe(() => {
+          this.leaderLineDraw = LeaderLineDraw.findByLinkFieldId(this._field.fieldId, this.coService.leaderLines);
+          this.isShowLeader = !!this.leaderLineDraw;
+        });
   }
 
   @HostBinding('class.link-leader-line') isShowLeader = false;
