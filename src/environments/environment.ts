@@ -4,8 +4,10 @@
 
 export const environment = {
   production: false,
-  urlPrefix: 'http' + '://' + '192.168.35.29:30610' + '/web/',
+  urlPrefix: 'http' + '://' + '192.168.11.23:1313' + '/web/',
   apiPrefix: 'http' + '://' + '192.168.35.29:30610' + ':1313/api/',
+  token: 'TgbuVbjL9alrtiLVw-h6HWPxsM0OlyxWuq6',
+  coId: 'BhKT54QcdwH2x41~'
 };
 //192.168.11.23:1313
 

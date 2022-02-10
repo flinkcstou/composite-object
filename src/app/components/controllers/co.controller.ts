@@ -6,6 +6,7 @@ import { BoRecord } from 'src/app/components/composite-editor/models/BoRecord';
 import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
 import { BoFieldLink } from 'src/app/components/composite-editor/models/BoFieldLink';
 import { CoFieldRecord } from 'src/app/components/composite-editor/models/CoFieldRecord';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class CoController {
 
   constructor(private http: HttpService) {
     this.http = http.setControllerPrefix('co');
-    this.setToken('t8UwJZfMtu9DcTA98-6guQOY8rLjwVs8GeZ');
+    this.setToken(environment.token);
   }
 
   setToken(token: string): void {
@@ -91,4 +92,17 @@ export class CoController {
       .pipe(map(response => response.body));
   }
 
+
+  changeCoFieldLabel(coId: string, draftId: string,
+                     coFieldId: string, label: string): Observable<void> {
+    return this.http.post<void>('/change-co-field-label', {coId, draftId, coFieldId, label})
+      .pipe(map(response => response.body));
+  }
+
+  changeCoFieldCode(coId: string, draftId: string,
+                    coFieldId: string, code: string): Observable<void> {
+
+    return this.http.post<void>('/change-co-field-code', {coId, draftId, coFieldId, code})
+      .pipe(map(response => response.body));
+  }
 }

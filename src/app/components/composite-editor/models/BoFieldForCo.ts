@@ -6,6 +6,7 @@ export interface BoFieldForCo extends StyleField {
   fieldId: string;
   label: string;
   type: any;
+  code: string;
   nativeFieldType: any;
   widgetType: any;
   tabId: string;

@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CoService } from 'src/app/components/services/co.service';
 import { fromEvent, Observable } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, mergeMap } from 'rxjs/operators';
+import { CoChangeService } from 'src/app/components/services/co-change.service';
 
 
 @Component({
@@ -12,15 +13,11 @@ import { exhaustMap } from 'rxjs/operators';
 export class CompositeEditorComponent implements OnInit, AfterViewInit {
 
 
-  // @ts-ignore
-  @ViewChild('save', {read: ElementRef}) saveElement: ElementRef;
-
-  // @ts-ignore
-  @ViewChild('cancel', {read: ElementRef}) cancelElement: ElementRef;
-
   load$: Observable<any>;
 
-  constructor(private coService: CoService) {
+  constructor(private coService: CoService,
+              private coChangeService: CoChangeService) {
+    this.load$ = this.coChangeService.changedBehavior.asObservable();
   }
 
   ngOnInit(): void {
@@ -28,7 +25,15 @@ export class CompositeEditorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.load$ = fromEvent(this.saveElement.nativeElement, 'click').pipe(exhaustMap(() => this.coService.apply()));
+    // this.load$ = fromEvent(this.saveElement.nativeElement, 'click').pipe(exhaustMap(() => this.coService.apply()));
+  }
+
+  save() {
+    this.coService.apply().subscribe();
+  }
+
+  cancel() {
+    this.coService.cancel().subscribe();
   }
 
 

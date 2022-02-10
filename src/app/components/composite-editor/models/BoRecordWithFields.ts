@@ -27,21 +27,7 @@ export class BoRecordWithFields implements BoRecord, StyleField {
 
 export const BoRecordWithFieldsF = {
   toBo(boRecord: BoRecord): BoRecordWithFields {
-
-    const fields = [];
-    for (const a of 'sdfdsfsd') {
-
-      const boFieldForCo: BoFieldForCo = {
-        fieldId: CoWidget.rndId(),
-        label: CoWidget.rndId(),
-        type: 'ASD'
-      } as BoFieldForCo;
-      fields.push(boFieldForCo);
-    }
-
-    const boRecordWithFields = new BoRecordWithFields(boRecord);
-    boRecordWithFields.fields = fields;
-    return boRecordWithFields as BoRecordWithFields;
+    return new BoRecordWithFields(boRecord);
   },
   toFields(boRecordWithFields: BoRecordWithFields, boFieldsForCo: BoFieldForCo[]): BoRecordWithFields {
     boRecordWithFields.fields = boFieldsForCo;

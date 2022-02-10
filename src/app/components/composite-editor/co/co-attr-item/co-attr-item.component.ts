@@ -36,11 +36,11 @@ export class CoAttrItemComponent implements OnInit, AfterViewInit {
       .filter(x => x.coFieldId !== this.field.coFieldId)
       .map(x => x.label)
       .includes(controlValue);
-  }
+  };
 
   saveLabel = (newValue: string) => {
-    return of(newValue);
-  }
+    return this.coService.changeCoFieldLabel(this.field.coFieldId, newValue);
+  };
 
   get hasField(): boolean {
     return !!this.field.coFieldId;

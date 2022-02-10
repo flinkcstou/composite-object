@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { EditingService } from 'src/app/components/services/editing.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-editing',
@@ -17,7 +18,7 @@ export class EditingComponent implements OnInit {
   ngOnInit(): void {
 
     this.route.params.pipe(
-      switchMap((id) => this.editingService.loadBoRecords('ratHx5Gnwi8aT~X7')),
+      switchMap((id) => this.editingService.loadBoRecords(environment.coId)),
       switchMap(id => this.editingService.loadBusinessObject(id)),
     ).subscribe();
   }

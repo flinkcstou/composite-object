@@ -6,6 +6,7 @@ export interface CoFieldRecord extends StyleField {
   coFieldId: string;
 
   label: string;
+  code: string;
   type: any; // todo nabu composite-object
 
   links: BoFieldLink[];
