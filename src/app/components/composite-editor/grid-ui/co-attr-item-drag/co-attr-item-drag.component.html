@@ -18,11 +18,12 @@
   <div class="co-item-drag"
        (mousedown)="mousedown($event,item, cdkDropList)"
        (mouseup)="mouseup($event)"
-       (cdkDragStarted)="started($event, bodyC, replacementC)"
+       (cdkDragStarted)="started($event, bodyC, replacementC, item)"
        (cdkDragEntered)="entered($event, item)"
        (cdkDragEnded)="ended($event, replacementC, item)"
        cdkDrag>
 
+    <app-attr-drag-preview [preview]="preview" *cdkDragPreview></app-attr-drag-preview>
     <div class="custom-placeholder" *cdkDragPlaceholder></div>
 
     <div #bodyC>

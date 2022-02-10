@@ -38,9 +38,17 @@ export class CoAttrItemDragComponent extends CommonSourceDragDirective<CoFieldRe
     this.toIds = this.dragService.toIdsEmpty();
   }
 
-  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement): void {
+  createPreview(item: CoFieldRecord): void {
+    this.preview = {
+      isScope: false,
+      label: item.label
+    };
+  }
+
+  started($event: CdkDragStart, bodyC: HTMLElement, replacementC: HTMLElement, item: CoFieldRecord): void {
     this.cdkDragStarted($event, bodyC, replacementC);
     this.dragService.unCheckBoField();
+    this.createPreview(item);
   }
 
   entered($event: CdkDragEnter<CoFieldRecord[]>, item: CoFieldRecord): void {
