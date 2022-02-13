@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleC
 import { BoRecordWithFields } from 'src/app/components/composite-editor/models/BoRecordWithFields';
 import { StyleFieldF } from 'src/app/components/composite-editor/models/StyleField';
 import { CoService } from 'src/app/components/services/co.service';
-import { fromEvent, Observable, of, Subject } from 'rxjs';
+import { fromEvent, merge, Observable, of, Subject } from 'rxjs';
 import { exhaustMap, mapTo, tap } from 'rxjs/operators';
 import { CoChangeService } from 'src/app/components/services/co-change.service';
 
@@ -16,6 +16,7 @@ export class BoAttrGridComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() boWithFields: BoRecordWithFields;
 
   @ViewChild('removeBo') removeBo: ElementRef<HTMLDivElement>;
+  @ViewChild('removeBoSecond') removeBoSecond: ElementRef<HTMLDivElement>;
 
   load$: Observable<any>;
   remove$: Observable<any>;
@@ -38,7 +39,7 @@ export class BoAttrGridComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.remove$ = fromEvent(this.removeBo.nativeElement, 'click')
+    this.remove$ = merge(fromEvent(this.removeBo.nativeElement, 'click'), fromEvent(this.removeBoSecond.nativeElement, 'click'))
       .pipe(
         exhaustMap(() => this.coService.removeBo(this.boWithFields)),
         tap(() => this.boWithFields.removeSubject.next(this.boWithFields.id)),

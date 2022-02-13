@@ -3,12 +3,6 @@
   display: grid;
   grid-template-columns: var(--grid-column);
 
-  &.hover {
-    .left .object .icon {
-      opacity: 1
-    }
-  }
-
   .left {
     position: relative;
     height: 100%;
@@ -36,15 +30,6 @@
         line-height: 18px;
         color: #232323;
       }
-
-      .icon {
-        opacity: 1;
-        color: #DADADA;
-      }
-
-      .icon:hover {
-        color: #EE5252;
-      }
     }
   }
 
@@ -63,15 +48,34 @@
     right: 0;
     z-index: 2;
 
-    mat-icon {
-      margin-left: auto;
-      color: #DADADA;
+    .icon {
+      position: relative;
+      padding-right: 0.5rem;
+    }
 
-      transition: transform 250ms;
 
-      &.expand {
-        transform: rotate(-180deg);
+  }
+
+  .display-none {
+    display: none;
+  }
+
+  .delete-icon {
+    &:hover {
+      mat-icon {
+        color: #EE5252;
       }
+    }
+  }
+
+  mat-icon {
+    margin-left: auto;
+    color: #DADADA;
+
+    transition: transform 250ms;
+
+    &.expand {
+      transform: rotate(-180deg);
     }
   }
 

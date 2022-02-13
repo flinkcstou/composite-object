@@ -3,7 +3,7 @@
     <div [title]="boWithFields?.name" class="title">
       {{boWithFields?.name}}
     </div>
-    <div #removeBo class="icon">
+    <div #removeBo class="icon delete-icon" [class.display-none]="!boWithFields?.isExpand">
       <mat-icon svgIcon="no-color-delete"></mat-icon>
     </div>
   </div>
@@ -27,6 +27,9 @@
   </app-expansion-panel>
 </div>
 <div class="abs">
+  <div #removeBoSecond class="icon delete-icon" [class.display-none]="boWithFields?.isExpand">
+    <mat-icon svgIcon="no-color-delete"></mat-icon>
+  </div>
   <div class="icon">
     <mat-icon svgIcon="no-color-circle-arrow-down" [class.expand]="boWithFields.isExpand"
               [appToggleClass]="boWithFields"></mat-icon>
