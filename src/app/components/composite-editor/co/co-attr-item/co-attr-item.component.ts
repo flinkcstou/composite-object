@@ -57,9 +57,4 @@ export class CoAttrItemComponent implements OnInit, AfterViewInit {
   onPasteLabel(e: ClipboardEvent): boolean {
     return e.clipboardData.getData('text/plain').indexOf('_') < 0;
   }
-
-  stop($event: MouseEvent) {
-    $event.stopPropagation();
-    $event.preventDefault();
-  }
 }
