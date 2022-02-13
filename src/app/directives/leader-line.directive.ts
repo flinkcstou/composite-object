@@ -179,7 +179,6 @@ export class LeaderLineDirective implements OnDestroy {
           {
             color: '#2F80ED',
             size: 3,
-            dash: {animation: true},
             hide: true
           }
         );

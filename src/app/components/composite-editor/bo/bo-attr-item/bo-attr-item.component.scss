@@ -26,6 +26,7 @@
     border-right: var(--border-gray);
     border-bottom: var(--border-gray);
     box-sizing: border-box;
+    z-index: 1;
 
     & > div:not(:first-child) {
       padding-left: 0.5rem;
@@ -33,6 +34,11 @@
 
     .icon {
       color: #DADADA;
+
+      mat-checkbox {
+        position: relative;
+        z-index: -1;
+      }
     }
 
     .title {

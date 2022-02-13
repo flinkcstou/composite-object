@@ -5,7 +5,7 @@ import { CoChangeService } from 'src/app/components/services/co-change.service';
 import { SubSink } from 'src/app/components/composite-editor/models/exist/SubSink';
 import { LeaderLineDraw } from 'src/app/components/composite-editor/models/LeaderLineDraw';
 import { filter } from 'rxjs/operators';
-import { merge } from 'rxjs';
+import { merge, pipe } from 'rxjs';
 
 @Directive({
   selector: '[appLinkLeaderLine]',
@@ -37,6 +37,7 @@ export class LinkLeaderLineDirective implements OnDestroy {
       merge(
         this.coChangeService.toggleLeaderLineSubject.asObservable(),
         this.coChangeService.changedBehavior.asObservable().pipe(filter((bool) => !bool)))
+        .pipe(filter(() => !!this._field?.fieldId))
         .subscribe(() => {
           this.leaderLineDraw = LeaderLineDraw.findByLinkFieldId(this._field.fieldId, this.coService.leaderLines);
           this.isShowLeader = !!this.leaderLineDraw;
