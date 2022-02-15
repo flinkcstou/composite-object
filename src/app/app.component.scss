@@ -1,0 +1,24 @@
+.icon-abs {
+  position: absolute;
+  //display: none;
+}
+
+.delete-icon {
+  &:hover {
+    mat-icon {
+      color: #EE5252;
+    }
+  }
+
+  mat-icon {
+    margin-left: auto;
+    color: #DADADA;
+
+    transition: transform 250ms;
+
+    &.expand {
+      transform: rotate(-180deg);
+    }
+  }
+}
+

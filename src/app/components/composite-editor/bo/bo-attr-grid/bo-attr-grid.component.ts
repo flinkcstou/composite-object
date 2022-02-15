@@ -31,7 +31,11 @@ export class BoAttrGridComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnChanges(changes: SimpleChanges): void {
     this.load$ = this.boWithFields.toggleSubject
       .pipe(
-        tap(() => this.coChangeService.toggleBoSubject.next(this.boWithFields.id)),
+        tap(() => {
+          if (!!this.boWithFields.fields) {
+            this.coChangeService.toggleBoSubject.next(this.boWithFields.id);
+          }
+        }),
         tap(() => StyleFieldF.clearCheck(this.boWithFields)),
         tap(() => this.coChangeService.calcCountCheck(true, true)),
         exhaustMap(() => this.coService.loadBoFieldsForCo(this.boWithFields))

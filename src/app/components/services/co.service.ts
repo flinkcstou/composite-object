@@ -170,7 +170,12 @@ export class CoService {
       .pipe(
         filter(() => !boRecordWithFields.fields),
         switchMap(() => this.coController.loadBoFieldsForCo(boRecordWithFields.id)),
-        tap((boFields) => BoRecordWithFieldsF.toFields(boRecordWithFields, boFields))
+        tap((boFields) => BoRecordWithFieldsF.toFields(boRecordWithFields, boFields)), // todo nabu test
+        tap(() => {
+          if (boRecordWithFields.isExpand) {
+            this.coChangeService.toggleBoSubject.next(boRecordWithFields.id);
+          }
+        }),
       );
   }
 

@@ -1,7 +1,6 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { BoFieldForCo } from 'src/app/components/composite-editor/models/BoFieldForCo';
 import { BoRecordWithFields } from 'src/app/components/composite-editor/models/BoRecordWithFields';
-import { CoService } from 'src/app/components/services/co.service';
 
 @Component({
   selector: 'app-bo-attr-item',
@@ -14,9 +13,15 @@ export class BoAttrItemComponent implements OnInit {
 
   @Input() field: BoFieldForCo | undefined;
 
+  @Input() last: boolean | undefined;
+
   constructor() {
   }
 
   ngOnInit(): void {
+  }
+
+  @HostBinding('class.last') get getLast(): boolean {
+    return this.last;
   }
 }

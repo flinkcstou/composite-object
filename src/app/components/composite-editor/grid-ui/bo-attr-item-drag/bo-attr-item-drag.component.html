@@ -8,7 +8,7 @@
      [cdkDropListData]="items"
      [cdkDropListConnectedTo]="toIds"
 >
-  <ng-container *ngFor="let item of items">
+  <ng-container *ngFor="let item of items; let last = last">
     <div
       class="bo-item-drag bo-item-drag-origin "
       [id]="item.fieldId"
@@ -27,7 +27,7 @@
         <ng-container
           *ngIf="itemTemplateRef"
           [ngTemplateOutlet]="itemTemplateRef"
-          [ngTemplateOutletContext]="{$implicit:item}"
+          [ngTemplateOutletContext]="{item: item, last:last}"
         ></ng-container>
       </div>
     </div>

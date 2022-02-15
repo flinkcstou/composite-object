@@ -10,6 +10,12 @@
 
   cursor: pointer;
 
+  &.last {
+    .left, .right {
+      border-bottom: none;
+    }
+  }
+
   &.check .left .icon {
     color: #2f80ed
 
@@ -66,10 +72,11 @@
     height: 100%;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    //grid-template-columns: 1fr var(--over-right);
 
     box-sizing: border-box;
     border-bottom: var(--border-gray);
-    border-right: var(--border-gray);
+    //border-right: var(--border-gray);
     z-index: 1;
 
     .title {
@@ -93,7 +100,6 @@
     align-items: center;
     justify-content: space-between;
     height: 42px;
-    padding-right: 0.5rem;
     right: 0;
     transition: all 250ms;
     opacity: 0;

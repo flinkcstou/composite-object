@@ -15,10 +15,11 @@
   <app-expansion-panel *ngIf="boWithFields.isExpand"
                        [defaultExpanded]="boWithFields.isExpand">
     <app-bo-attr-item-drag [items]="boWithFields.fields">
-      <ng-template let-item #item>
+      <ng-template let-item="item" let-last="last" #item>
         <app-bo-attr-item [appCheckClass]="item"
                           appHoverClass
                           [field]="item"
+                          [last]="last"
                           [boWithFields]="boWithFields"
         >
         </app-bo-attr-item>

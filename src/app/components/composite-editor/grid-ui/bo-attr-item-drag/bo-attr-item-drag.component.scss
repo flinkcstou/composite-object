@@ -40,19 +40,19 @@
 
   background: #EDEFF0;
 
-  ::ng-deep app-bo-attr-item {
-    border-top: var(--border-chooser);
-
-    .left {
-      border-left: var(--border-chooser);
-      border-bottom: var(--border-chooser);
-    }
-
-    .right {
-      border-bottom: var(--border-chooser);
-      border-right: var(--border-chooser);
-    }
-  }
+  //::ng-deep app-bo-attr-item {
+  //  border-top: var(--border-chooser);
+  //
+  //  .left {
+  //    border-left: var(--border-chooser);
+  //    border-bottom: var(--border-chooser);
+  //  }
+  //
+  //  .right {
+  //    border-bottom: var(--border-chooser);
+  //    border-right: var(--border-chooser);
+  //  }
+  //}
 }
 
 

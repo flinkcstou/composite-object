@@ -52,8 +52,10 @@ export class BoAttrItemDragComponent extends CommonSourceDragDirective<BoFieldFo
   }
 
   dropped($event: CdkDragDrop<BoFieldForCo[]>): void {
-    if ($event.container.id !== this.dragService.boAttrItemsDrag) {
-      this.dragService.unCheckBoField();
-    }
+    setTimeout(() => {
+      if ($event.container.id !== this.dragService.boAttrItemsDrag) {
+        this.dragService.unCheckBoField();
+      }
+    }, 10);
   }
 }

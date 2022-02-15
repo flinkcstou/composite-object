@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CoService } from 'src/app/components/services/co.service';
-import { fromEvent, Observable } from 'rxjs';
-import { exhaustMap, mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { CoChangeService } from 'src/app/components/services/co-change.service';
 
 
