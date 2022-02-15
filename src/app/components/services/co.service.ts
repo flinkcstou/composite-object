@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
 import { filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { CoController } from 'src/app/components/controllers/co.controller';
 import { BoController } from 'src/app/components/controllers/bo.controller';
 import { EditingService } from 'src/app/components/services/editing.service';
 import { safeObserve } from 'src/app/app.component';
 import { BoFieldForCo, BoFieldForCoF } from 'src/app/components/composite-editor/models/BoFieldForCo';
-import { CompositeObject } from 'src/app/components/composite-editor/models/CompositeObject';
 import { BoRecord } from 'src/app/components/composite-editor/models/BoRecord';
 import { BoRecordWithFields, BoRecordWithFieldsF } from 'src/app/components/composite-editor/models/BoRecordWithFields';
 import { CoFieldRecord, CoFieldRecordF } from 'src/app/components/composite-editor/models/CoFieldRecord';
@@ -14,7 +13,6 @@ import { BoFieldLink, BoFieldLinkF } from 'src/app/components/composite-editor/m
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { CoWidget, CoWidgetF } from 'src/app/components/composite-editor/models/CoWidget';
 import { CoWidgetType } from 'src/app/components/composite-editor/models/CoWidgetType';
-import { BoFieldForCoWIthBoId, BoFieldForCoWIthBoIdF } from 'src/app/components/composite-editor/models/BoFieldForCoWIthBoId';
 import { LeaderLineDraw } from 'src/app/components/composite-editor/models/LeaderLineDraw';
 import { CoChangeService } from 'src/app/components/services/co-change.service';
 
@@ -170,7 +168,11 @@ export class CoService {
       .pipe(
         filter(() => !boRecordWithFields.fields),
         switchMap(() => this.coController.loadBoFieldsForCo(boRecordWithFields.id)),
-        tap((boFields) => BoRecordWithFieldsF.toFields(boRecordWithFields, boFields)), // todo nabu test
+
+        tap((boFields) => {
+          BoFieldForCoF.setBoId(boRecordWithFields.id, boFields);
+          BoRecordWithFieldsF.toFields(boRecordWithFields, boFields);
+        }),
         tap(() => {
           if (boRecordWithFields.isExpand) {
             this.coChangeService.toggleBoSubject.next(boRecordWithFields.id);
@@ -182,15 +184,17 @@ export class CoService {
 
   dropToCoGroup(event: CdkDragDrop<BoFieldForCo[]>): void {
     const coFields = [...this.coFieldsComposite, ...this.coFieldsSimple];
-    const fields: BoFieldForCoWIthBoId[] = [].concat.apply([], this.boRecordsWithFields.map((bo) => bo?.fields?.map?.(field => BoFieldForCoWIthBoIdF.create(bo.id, field))).filter(Boolean) as any[]);
+    const fields: BoFieldForCo[] = BoFieldForCoF.flat(this.boRecordsWithFields);
     const checkedUniqueFields = fields.filter((field) => field.isChecked && !coFields.some((coField) => coField.links.some((link) => link.fieldId === field.fieldId)));
     if (!checkedUniqueFields.length) {
       return;
     }
     const boFieldLinks = checkedUniqueFields.map((field) => BoFieldLinkF.create(field.boId, field.fieldId));
-    this.coController.addCoFieldToSimple(this.coId, this.draftId, boFieldLinks).subscribe((coFieldRecords) => {
-      this.coFieldsSimple.push(...coFieldRecords);
-    });
+    this.coController.addCoFieldToSimple(this.coId, this.draftId, boFieldLinks)
+      .pipe(this.coChangeService.changedTap())
+      .subscribe((coFieldRecords: CoFieldRecord[]) => {
+        this.coFieldsSimple.push(...coFieldRecords);
+      });
   }
 
   dropToCoComposite(event: CdkDragDrop<CoFieldRecord[], CoFieldRecord[]> | CdkDragDrop<CoFieldRecord[], BoFieldForCo[]>): void {
@@ -202,12 +206,29 @@ export class CoService {
   }
 
   dropToCoCompositeByBoField(event: CdkDragDrop<CoFieldRecord[], BoFieldForCo[]>): void {
-    const coField = event.container.data[0] as CoFieldRecord;
+    const currentField = event.container.data[0] as CoFieldRecord;
     const boFields = BoFieldForCoF.flat(this.boRecordsWithFields).filter((boField) => boField.isChecked);
 
-    if (!boFields.every((boField) => boField.type === coField.type)) {
-      // todo nabu
+    if (boFields.every((boField) => boField.type === currentField.type) && currentField.links.length === 1) {
+      const links = [...boFields.map(f => BoFieldLinkF.create(f.boId, f.fieldId)), ...currentField.links];
+      this.coFieldsComposite.push(currentField);
+      currentField.links = links;
+      CoFieldRecordF.remove(currentField, this.coFieldsSimple);
+      this.coChangeService.removeCoFieldSubject.next('empty');
+      this.coController.addCoFieldToComposite(this.coId, this.draftId, links, currentField.coFieldId)
+        .pipe(take(1))
+        .pipe(this.coChangeService.changedTap())
+        .subscribe();
       return;
+    }
+
+    if (boFields.every((boField) => boField.type === currentField.type) && currentField.links.length > 1) {
+      const links = [...boFields.map(f => BoFieldLinkF.create(f.boId, f.fieldId)), ...currentField.links];
+      currentField.links = links;
+      this.coController.addCoFieldToComposite(this.coId, this.draftId, links, currentField.coFieldId)
+        .pipe(take(1))
+        .pipe(this.coChangeService.changedTap())
+        .subscribe();
     }
 
 
